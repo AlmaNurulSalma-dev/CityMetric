@@ -27,35 +27,28 @@ ROOT     = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data" / "processed"
 ASSETS   = ROOT / "assets"
 
-# ─── Design System — Pastel Palette ──────────────────────────────────────────
-# Blends Coastal Breeze + Lilac Field + Cotton Candy accents
-PAGE_BG      = "#F5F3FA"   # Very light lavender-white (base)
-CARD_BG      = "#FFFFFF"   # Pure white cards
-SIDEBAR_BG   = "#1C1733"   # Deep dark (high contrast for nav)
-BORDER_COL   = "#E4E2F4"   # Soft lilac border
-PRIMARY      = "#7275B3"   # Deeper lilac — interactive elements
-PRIMARY_LIGHT= "#D1D4F5"   # Soft Lilac (Lilac Field)
-TEXT_MAIN    = "#1E1A35"   # Near-black with purple tint
-TEXT_MUTED   = "#8B8AAD"   # Muted lavender-grey
-TEXT_ON_DARK = "#EDE9FF"   # Text on dark sidebar
-SHADOW       = "0 2px 16px rgba(114,117,179,0.10), 0 1px 4px rgba(0,0,0,0.04)"
-SHADOW_HOVER = "0 8px 32px rgba(114,117,179,0.18), 0 2px 8px rgba(0,0,0,0.06)"
-GRID_COL     = "#F0EEF9"   # Very light grid lines
+# ─── Design System — Dark Pastel Palette ────────────────────────────────────
+# Dark mode with soft pastel accents
+PAGE_BG      = "#0F0E1F"   # Deep dark background
+CARD_BG      = "#1A1A2E"   # Dark card background
+SIDEBAR_BG   = "#1A1A2E"   # Dark sidebar
+BORDER_COL   = "#2A2A42"   # Dark subtle borders
+PRIMARY      = "#9B9FD9"   # Soft lilac — interactive elements
+PRIMARY_LIGHT= "#C7CBE8"   # Light lilac accents
+TEXT_MAIN    = "#E8E4FF"   # Light text on dark
+TEXT_MUTED   = "#A8A5BE"   # Muted text
+TEXT_ON_DARK = "#E8E4FF"   # Text on dark sidebar
+SHADOW       = "0 2px 16px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.2)"
+SHADOW_HOVER = "0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.25)"
+GRID_COL     = "#252540"   # Dark grid lines
 
-# Cluster palette — one color per palette family
+# Cluster palette — brighter pastels for dark mode
 CLUSTER_COLORS = {
-    0: "#F9C0D3",   # Soft Pink    — Balanced Cities
-    1: "#B4B8E0",   # Deep Lilac   — Digital Leaders
-    2: "#A7D8DE",   # Baby Blue    — Established Hubs
-    3: "#A8C3A5",   # Mint Green   — Rising Stars
-    4: "#FFB399",   # Peach        — Emerging Markets
-}
-CLUSTER_DARK = {
-    0: "#C2547A",   # deep pink
-    1: "#5254A3",   # deep indigo
-    2: "#3A9DAA",   # deep teal
-    3: "#4A8A47",   # deep green
-    4: "#C26B42",   # deep coral
+    0: "#F4A5C7",   # Soft Pink    — Balanced Cities
+    1: "#C7CBE8",   # Soft Lilac   — Digital Leaders
+    2: "#A8D8DE",   # Soft Blue    — Established Hubs
+    3: "#B5D9A8",   # Soft Green   — Rising Stars
+    4: "#F5B999",   # Soft Peach   — Emerging Markets
 }
 
 # Truly distinct for comparison overlay
@@ -166,26 +159,27 @@ p, li, td, th {{
     border-color: rgba(255,255,255,0.08) !important; margin: 12px 0 !important;
 }}
 
-/* ── Multiselect tags — pastel pink ── */
+/* ── Multiselect tags — soft pink ── */
 [data-baseweb="tag"] {{
-    background-color: #8B3062 !important;
-    border: 1px solid #F9C0D3 !important;
+    background-color: rgba(244,165,199,0.15) !important;
+    border: 1px solid #F4A5C7 !important;
     border-radius: 20px !important;
 }}
 [data-baseweb="tag"] span {{
-    color: #FDE8F1 !important; font-weight: 600 !important;
+    color: #F4A5C7 !important; font-weight: 600 !important;
     font-size: 11px !important; font-family: 'Inter', sans-serif !important;
 }}
 [data-baseweb="tag"] [role="presentation"] svg,
-[data-baseweb="tag"] button svg {{ fill: #F9C0D3 !important; }}
+[data-baseweb="tag"] button svg {{ fill: #F4A5C7 !important; }}
 
-/* ── Selectbox / inputs — light ── */
+/* ── Selectbox / inputs — dark ── */
 [data-baseweb="input"], [data-baseweb="select"],
 [data-testid="stMultiSelect"] > div,
 [data-testid="stSelectbox"] > div > div {{
-    background-color: #F0EEF9 !important;
+    background-color: {CARD_BG} !important;
     border-color: {BORDER_COL} !important;
     font-family: 'Plus Jakarta Sans', sans-serif !important;
+    color: {TEXT_MAIN} !important;
 }}
 [data-baseweb="menu"] {{
     background-color: {CARD_BG} !important;
@@ -193,14 +187,14 @@ p, li, td, th {{
     box-shadow: {SHADOW} !important;
 }}
 [data-baseweb="menu"] li {{ color: {TEXT_MAIN} !important; font-size: 0.875rem !important; }}
-[data-baseweb="menu"] li:hover {{ background-color: {PRIMARY_LIGHT} !important; }}
+[data-baseweb="menu"] li:hover {{ background-color: {BORDER_COL} !important; }}
 
 /* ── Tabs ── */
 .stTabs [data-baseweb="tab-list"] {{
-    background: {CARD_BG}; border-radius: 12px;
-    padding: 4px; gap: 2px;
-    border: 1px solid {BORDER_COL};
-    box-shadow: {SHADOW};
+    background: transparent; border-radius: 12px;
+    padding: 4px; gap: 8px;
+    border: none;
+    box-shadow: none;
 }}
 .stTabs [data-baseweb="tab"] {{
     border-radius: 9px; font-weight: 500;
@@ -208,11 +202,13 @@ p, li, td, th {{
     font-size: 0.85rem; padding: 6px 18px;
     font-family: 'Plus Jakarta Sans', sans-serif !important;
     transition: all 0.15s ease;
+    border-bottom: 2px solid transparent !important;
 }}
 .stTabs [aria-selected="true"] {{
-    background: {PRIMARY_LIGHT} !important;
-    color: {PRIMARY} !important;
+    background: transparent !important;
+    color: {PRIMARY_LIGHT} !important;
     font-weight: 700 !important;
+    border-bottom: 2px solid {PRIMARY_LIGHT} !important;
 }}
 
 /* ── Dimension pill buttons ── */
@@ -230,23 +226,23 @@ p, li, td, th {{
 [data-testid="stBaseButton-secondary"]:hover {{
     border-color: {PRIMARY} !important;
     color: {PRIMARY} !important;
-    background: {PRIMARY_LIGHT} !important;
-    box-shadow: 0 0 0 3px rgba(114,117,179,0.12) !important;
+    background: rgba(155,159,217,0.15) !important;
+    box-shadow: 0 0 0 3px rgba(155,159,217,0.2) !important;
 }}
 [data-testid="stBaseButton-primary"] {{
-    background: linear-gradient(135deg, #5254A3 0%, #7275B3 100%) !important;
-    border: 1.5px solid #5254A3 !important;
+    background: linear-gradient(135deg, #7B7FBD 0%, #9B9FD9 100%) !important;
+    border: 1.5px solid #7B7FBD !important;
     border-radius: 100px !important;
-    color: #FFFFFF !important;
+    color: #0F0E1F !important;
     font-size: 0.8rem !important; font-weight: 700 !important;
     font-family: 'Plus Jakarta Sans', sans-serif !important;
-    box-shadow: 0 2px 12px rgba(82,84,163,0.28) !important;
+    box-shadow: 0 2px 12px rgba(155,159,217,0.35) !important;
     padding: 6px 0 !important;
     letter-spacing: 0.01em !important;
 }}
 [data-testid="stBaseButton-primary"]:hover {{
-    background: linear-gradient(135deg, #4446A0 0%, #6568B0 100%) !important;
-    box-shadow: 0 4px 20px rgba(82,84,163,0.35) !important;
+    background: linear-gradient(135deg, #8B8FCB 0%, #ABAFE7 100%) !important;
+    box-shadow: 0 4px 20px rgba(155,159,217,0.45) !important;
     transform: translateY(-1px) !important;
 }}
 
