@@ -216,35 +216,37 @@ st.markdown(f"""
   /* ── Page divider ── */
   .page-divider {{ height: 1px; background: {BORDER_COL}; margin: 1.5rem 0; }}
 
-  /* ── Dimension picker — horizontal radio as pill buttons ── */
-  [data-testid="stRadio"] [data-baseweb="radio"] {{
-      background: {CARD_BG};
-      border: 1px solid {BORDER_COL};
-      border-radius: 30px;
-      padding: 8px 18px;
-      margin-right: 8px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-  }}
-  [data-testid="stRadio"] [data-baseweb="radio"]:hover {{
-      border-color: {PRIMARY};
-      background: {PRIMARY_SOFT};
-  }}
-  [data-testid="stRadio"] [aria-checked="true"] [data-baseweb="radio"] {{
-      background: #3B2D6B !important;
-      border-color: {PRIMARY} !important;
-  }}
-  /* Hide the actual radio dot — we only want the label */
-  [data-testid="stRadio"] [data-baseweb="radio"] div:first-child {{
-      display: none !important;
-  }}
-  [data-testid="stRadio"] label {{
-      font-size: 0.88rem !important;
+  /* ── Dimension pill buttons ── */
+  /* Secondary (unselected): dark card, subtle border, muted text */
+  [data-testid="stBaseButton-secondary"] {{
+      background: {CARD_BG} !important;
+      border: 1px solid {BORDER_COL} !important;
+      border-radius: 30px !important;
+      color: {TEXT_MUTED} !important;
+      font-size: 0.85rem !important;
       font-weight: 500 !important;
-      color: {TEXT_MAIN} !important;
-      text-transform: none !important;
-      letter-spacing: 0 !important;
-      cursor: pointer;
+      transition: all 0.15s ease !important;
+      padding: 6px 0 !important;
+  }}
+  [data-testid="stBaseButton-secondary"]:hover {{
+      border-color: {PRIMARY} !important;
+      color: {PRIMARY} !important;
+      background: {PRIMARY_SOFT} !important;
+  }}
+  /* Primary (selected): glowing purple, bright white text */
+  [data-testid="stBaseButton-primary"] {{
+      background: linear-gradient(135deg, #5B21B6, #7C3AED) !important;
+      border: 1px solid {PRIMARY} !important;
+      border-radius: 30px !important;
+      color: #FFFFFF !important;
+      font-size: 0.85rem !important;
+      font-weight: 700 !important;
+      box-shadow: 0 0 12px rgba(196,181,253,0.3) !important;
+      padding: 6px 0 !important;
+  }}
+  [data-testid="stBaseButton-primary"]:hover {{
+      background: linear-gradient(135deg, #6D28D9, #8B5CF6) !important;
+      box-shadow: 0 0 18px rgba(196,181,253,0.4) !important;
   }}
 
   /* ── Scrollbar — subtle dark ── */
@@ -753,14 +755,24 @@ elif "Dimension" in page:
     st.caption("Explore any single dimension across all cities and regions.")
     st.markdown('<div class="page-divider"></div>', unsafe_allow_html=True)
 
-    # Single clickable radio — icon + label, horizontal layout, no dropdown
-    sel_dim = st.radio(
-        "Dimension",
-        options=DIMS,
-        format_func=lambda x: f"{DIM_ICONS[DIMS.index(x)]}  {x.replace('_score','').title()}",
-        horizontal=True,
-        label_visibility="collapsed",
-    )
+    # Pill buttons — icon + label clearly visible, session state tracks selection
+    if "sel_dim" not in st.session_state:
+        st.session_state.sel_dim = DIMS[0]
+
+    btn_cols = st.columns(len(DIMS))
+    for i, (d, lbl, icon) in enumerate(zip(DIMS, DIM_LABELS, DIM_ICONS)):
+        with btn_cols[i]:
+            is_active = (st.session_state.sel_dim == d)
+            if st.button(
+                f"{icon} {lbl}",
+                key=f"dim_{d}",
+                use_container_width=True,
+                type="primary" if is_active else "secondary",
+            ):
+                st.session_state.sel_dim = d
+                st.rerun()
+
+    sel_dim = st.session_state.sel_dim
     label = sel_dim.replace("_score","").title()
 
     if len(df) == 0:
