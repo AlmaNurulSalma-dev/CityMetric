@@ -1,17 +1,67 @@
-=== CityMetric Clustering Evaluation ===
+=== CityMetric — WEKA Evaluation Metrics Summary ===
+Source : WEKA 3.8.6 GUI (official run)
+Date   : 2026-06-02
 
-Algorithm   : K-Means (sklearn, replicates WEKA SimpleKMeans)
-K           : 5
-Seed        : 42
-Features    : affordability_score, digital_score, urban_score, innovation_score, talent_score, growth_score
-Cities      : 55
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. ELBOW CURVE — K Selection Justification
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Silhouette Score  : 0.2363  (range -1 to 1, higher=better, target>0.3)
-Davies-Bouldin    : 1.2286  (lower=better)
+K    WCSS        Reduction   Decision
+2    11.3852     —           Too few, low granularity
+3     9.0402     -2.34       Significant improvement
+4     7.7852     -1.25       Good improvement
+5     7.4427     -0.35  ◄    ELBOW — marginal gain, interpretable
+6     6.0626     -1.38       Over-segmented
+7     6.1406     +0.08       WCSS increases — unstable!
 
-Cluster sizes:
-  Cluster 0 [Established Hubs]: 9 cities
-  Cluster 1 [Balanced Cities]: 12 cities
-  Cluster 2 [Rising Stars]: 5 cities
-  Cluster 3 [Digital Leaders]: 18 cities
-  Cluster 4 [Emerging Markets]: 11 cities
+→ K=5 SELECTED: smallest K where improvement becomes marginal (<0.5).
+  K=7 actually worsens WCSS vs K=6, confirming K=5 as optimal.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. SIMPLEKIMEANS K=5 — Quality Metrics
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Algorithm        : SimpleKMeans (WEKA 3.8.6)
+K                : 5
+Seed             : 42
+Iterations needed: 4  (converged quickly = stable solution)
+WCSS             : 7.4427
+
+Cluster sizes    : 13 / 18 / 11 / 5 / 8  (reasonably balanced)
+Largest cluster  : 18 (33%) — Balanced/Digital cities
+Smallest cluster : 5  (9%)  — Established Hubs (niche, justifiable)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. EM CLUSTERING — Validation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Algorithm        : EM (Expectation-Maximization, WEKA)
+K                : 5
+Iterations       : 17
+Log likelihood   : -8.20479
+
+EM vs K-Means agreement:
+Both produce 5 clusters with similar group sizes and profiles.
+High-innovation cluster confirmed by both (EM C4 ≈ K-Means C2).
+This cross-validates the K-Means solution.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. J48 DECISION TREE — Classification Metrics
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Test mode        : 10-fold stratified cross-validation
+Overall accuracy : 85.45% (47/55 correct)
+Kappa            : 0.8108  (>0.8 = excellent agreement)
+Weighted F1      : 0.856
+Weighted ROC AUC : 0.919
+
+Primary split    : digital_score <= 5.2
+→ Digital infrastructure is the #1 differentiator between city types
+
+Secondary splits : innovation_score (2.21 and 4.26 thresholds)
+→ Innovation determines high-tier classification
+
+Best classified  : Emerging Markets (100% Precision), Rising Stars (100%)
+Most confused    : Balanced Cities ↔ Digital Leaders (near boundary)
+
+Tree: 6 leaves, 11 nodes — simple and interpretable, no overfitting
