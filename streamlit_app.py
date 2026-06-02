@@ -50,6 +50,14 @@ CLUSTER_COLORS = {
     3: "#B5D9A8",   # Soft Green   — Rising Stars
     4: "#F5B999",   # Soft Peach   — Emerging Markets
 }
+# Dark/saturated versions for borders and text on dark backgrounds
+CLUSTER_DARK = {
+    0: "#E85CA0",   # Saturated Pink
+    1: "#9B9FD9",   # Saturated Lilac
+    2: "#6FB5C5",   # Saturated Blue
+    3: "#87C377",   # Saturated Green
+    4: "#E89966",   # Saturated Peach
+}
 
 # Truly distinct for comparison overlay
 COMPARE_COLORS = ["#C2547A","#5254A3","#3A9DAA","#C26B42","#4A8A47","#9B59B6"]
