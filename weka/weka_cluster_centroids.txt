@@ -1,0 +1,9 @@
+=== Cluster Centroids (sklearn K-Means K=5) ===
+
+         affordability_score  digital_score  urban_score  innovation_score  talent_score  growth_score
+cluster                                                                                               
+0                     4.7089         6.4389       6.0167            5.2789        6.6167        4.4156
+1                     4.6133         6.2508       4.8275            1.7275        5.5808        2.5750
+2                     6.9440         3.9120       5.1600            1.7660        3.5920        3.1960
+3                     5.4794         6.9872       4.9867            2.8772        6.1806        4.6706
+4                     4.3809         3.5318       6.6491            1.3964        3.4473        2.8964

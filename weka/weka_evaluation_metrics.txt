@@ -1,0 +1,17 @@
+=== CityMetric Clustering Evaluation ===
+
+Algorithm   : K-Means (sklearn, replicates WEKA SimpleKMeans)
+K           : 5
+Seed        : 42
+Features    : affordability_score, digital_score, urban_score, innovation_score, talent_score, growth_score
+Cities      : 55
+
+Silhouette Score  : 0.2363  (range -1 to 1, higher=better, target>0.3)
+Davies-Bouldin    : 1.2286  (lower=better)
+
+Cluster sizes:
+  Cluster 0 [Established Hubs]: 9 cities
+  Cluster 1 [Balanced Cities]: 12 cities
+  Cluster 2 [Rising Stars]: 5 cities
+  Cluster 3 [Digital Leaders]: 18 cities
+  Cluster 4 [Emerging Markets]: 11 cities

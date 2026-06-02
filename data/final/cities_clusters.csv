@@ -1,0 +1,56 @@
+city,country,region,cluster,cluster_name,opportunity_index
+Tokyo,Japan,Asia-Pacific,3,Digital Leaders,5.44
+Shanghai,China,Asia-Pacific,0,Established Hubs,5.03
+Beijing,China,Asia-Pacific,0,Established Hubs,4.72
+Seoul,South Korea,Asia-Pacific,2,Rising Stars,4.44
+Singapore,Singapore,Asia-Pacific,3,Digital Leaders,5.59
+Hong Kong,Hong Kong,Asia-Pacific,3,Digital Leaders,5.82
+Bangkok,Thailand,Asia-Pacific,1,Balanced Cities,3.99
+Jakarta,Indonesia,Asia-Pacific,4,Emerging Markets,3.43
+Mumbai,India,Asia-Pacific,4,Emerging Markets,3.17
+Delhi,India,Asia-Pacific,2,Rising Stars,3.41
+Bangalore,India,Asia-Pacific,2,Rising Stars,3.63
+Kuala Lumpur,Malaysia,Asia-Pacific,2,Rising Stars,4.77
+Manila,Philippines,Asia-Pacific,4,Emerging Markets,4.17
+Ho Chi Minh City,Vietnam,Asia-Pacific,1,Balanced Cities,3.92
+Sydney,Australia,Asia-Pacific,3,Digital Leaders,5.55
+Melbourne,Australia,Asia-Pacific,3,Digital Leaders,5.74
+London,United Kingdom,Europe,0,Established Hubs,5.48
+Paris,France,Europe,3,Digital Leaders,5.08
+Berlin,Germany,Europe,3,Digital Leaders,5.08
+Amsterdam,Netherlands,Europe,3,Digital Leaders,5.05
+Madrid,Spain,Europe,1,Balanced Cities,4.78
+Barcelona,Spain,Europe,1,Balanced Cities,4.8
+Rome,Italy,Europe,1,Balanced Cities,4.28
+Milan,Italy,Europe,1,Balanced Cities,3.95
+Vienna,Austria,Europe,3,Digital Leaders,4.73
+Zurich,Switzerland,Europe,3,Digital Leaders,5.45
+Stockholm,Sweden,Europe,3,Digital Leaders,5.17
+Oslo,Norway,Europe,3,Digital Leaders,5.1
+Copenhagen,Denmark,Europe,3,Digital Leaders,4.98
+Helsinki,Finland,Europe,3,Digital Leaders,4.73
+Warsaw,Poland,Europe,1,Balanced Cities,3.66
+Prague,Czechia,Europe,1,Balanced Cities,4.23
+Budapest,Hungary,Europe,1,Balanced Cities,4.07
+Lisbon,Portugal,Europe,1,Balanced Cities,4.38
+New York,USA,Americas,0,Established Hubs,6.01
+San Francisco,USA,Americas,0,Established Hubs,5.93
+Los Angeles,USA,Americas,0,Established Hubs,6.2
+Chicago,USA,Americas,0,Established Hubs,5.86
+Toronto,Canada,Americas,3,Digital Leaders,4.77
+Vancouver,Canada,Americas,3,Digital Leaders,4.92
+Mexico City,Mexico,Americas,4,Emerging Markets,4.25
+Sao Paulo,Brazil,Americas,4,Emerging Markets,4.61
+Buenos Aires,Argentina,Americas,1,Balanced Cities,4.45
+Bogota,Colombia,Americas,4,Emerging Markets,4.24
+Lima,Peru,Americas,4,Emerging Markets,4.36
+Santiago,Chile,Americas,1,Balanced Cities,4.64
+Dubai,UAE,Middle East,3,Digital Leaders,5.13
+Abu Dhabi,UAE,Middle East,3,Digital Leaders,5.21
+Tel Aviv,Israel,Middle East,0,Established Hubs,5.5
+Istanbul,Turkey,Middle East,0,Established Hubs,5.49
+Cairo,Egypt,Africa & Middle East,4,Emerging Markets,3.42
+Nairobi,Kenya,Africa & Middle East,4,Emerging Markets,2.87
+Lagos,Nigeria,Africa & Middle East,4,Emerging Markets,2.63
+Johannesburg,South Africa,Africa & Middle East,2,Rising Stars,4.23
+Casablanca,Morocco,Africa & Middle East,4,Emerging Markets,3.74

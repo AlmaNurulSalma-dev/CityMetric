@@ -1,0 +1,96 @@
+CityMetric — Data Dictionary
+cities_features.csv / cities_clustered.csv
+============================================================
+
+IDENTIFIERS
+-----------
+city                        City name (string)
+country                     Country name (string)
+region                      Region: Asia-Pacific / Europe / Americas /
+                            Middle East / Africa & Middle East
+latitude                    Geographic latitude (float, degrees)
+longitude                   Geographic longitude (float, degrees)
+population                  City population (integer)
+
+DIMENSION SCORES (0–10 scale, higher = better)
+----------------------------------------------
+affordability_score         Weighted score: salary/rent ratio, food, utilities
+digital_score               Internet penetration, broadband, mobile, ISP price
+startup_score               Placeholder 5.0 (no data available)
+urban_score                 Urban pop %, climate comfort, city size
+innovation_score            R&D spending, research output, university quality
+talent_score                Education, developer density, seniority
+growth_score                GDP, pop growth, high-tech exports, climate trend
+
+COMPOSITE
+---------
+opportunity_index           Mean of 6 active dimension scores (0–10)
+
+CLUSTERING
+----------
+cluster                     Cluster ID (0–4, integer)
+cluster_name                Descriptive label:
+                              0 = Established Hubs
+                              1 = Balanced Cities
+                              2 = Rising Stars
+                              3 = Digital Leaders
+                              4 = Emerging Markets
+
+============================================================
+RAW METRICS (in cities_cleaned.csv)
+============================================================
+
+NUMBEO (USD prices)
+-------------------
+rent_1br_city_center        Monthly rent, 1BR apartment in city center ($)
+rent_3br_city_center        Monthly rent, 3BR apartment in city center ($)
+avg_net_salary              Average monthly net salary after tax ($)
+meal_inexpensive_restaurant Meal at inexpensive restaurant ($)
+utilities_monthly_85m2      Monthly utilities for 85m² apartment ($)
+price_per_m2_city_center    Property price per m² in city center ($)
+internet_monthly_60mbps     Monthly internet (60 Mbps) ($)
+monthly_pass_transport      Monthly public transport pass ($)
+
+TEMPERATURE
+-----------
+avg_temp_c                  Annual average temperature (°C)
+temp_std_c                  Annual temperature standard deviation (°C)
+temp_trend_c                Temperature change 1995–2000 vs 2015–2020 (°C)
+
+WORLD BANK
+----------
+internet_users_pct          Internet users (% of population)
+broadband_per_100           Fixed broadband subscriptions per 100 people
+mobile_per_100              Mobile subscriptions per 100 people
+gdp_per_capita_usd          GDP per capita (current USD)
+gini_index                  Gini coefficient (income inequality, 0–100)
+urban_pop_pct               Urban population (% of total)
+pop_growth_rate             Annual population growth rate (%)
+rd_spending_pct_gdp         R&D expenditure (% of GDP)
+scientific_articles         Scientific and technical journal articles (count)
+high_tech_exports_pct       High-technology exports (% of manufactured exports)
+tertiary_enrollment_pct     School enrollment, tertiary (% gross)
+adult_literacy_pct          Literacy rate, adult total (% ages 15+)
+edu_spending_pct_gdp        Government expenditure on education (% of GDP)
+
+UNIVERSITY RANKINGS (country-level, assigned to cities by country)
+------------------------------------------------------------------
+cwur_top_uni_score          CWUR: best university score in country (0–100)
+cwur_avg_score              CWUR: average score across ranked universities
+cwur_uni_count              CWUR: number of ranked universities in country
+cwur_patents                CWUR: average patents score
+cwur_citations              CWUR: average citations score
+cwur_research               CWUR: average publications score
+times_top_uni_score         Times: best university total score
+times_avg_research          Times: average research score
+times_avg_citations         Times: average citations score
+times_uni_count             Times: number of ranked universities
+shanghai_top_score          Shanghai ARWU: best university total score
+shanghai_uni_count          Shanghai ARWU: number of ranked universities
+
+STACK OVERFLOW (country-level)
+------------------------------
+so_developer_count          Survey respondents from country
+so_employed_dev_count       Employed developers from country
+so_median_salary_usd        Median annual salary (USD, ConvertedCompYearly)
+so_senior_dev_pct           % respondents with ≥10 years experience
