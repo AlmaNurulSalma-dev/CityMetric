@@ -216,6 +216,37 @@ st.markdown(f"""
   /* ── Page divider ── */
   .page-divider {{ height: 1px; background: {BORDER_COL}; margin: 1.5rem 0; }}
 
+  /* ── Dimension picker — horizontal radio as pill buttons ── */
+  [data-testid="stRadio"] [data-baseweb="radio"] {{
+      background: {CARD_BG};
+      border: 1px solid {BORDER_COL};
+      border-radius: 30px;
+      padding: 8px 18px;
+      margin-right: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+  }}
+  [data-testid="stRadio"] [data-baseweb="radio"]:hover {{
+      border-color: {PRIMARY};
+      background: {PRIMARY_SOFT};
+  }}
+  [data-testid="stRadio"] [aria-checked="true"] [data-baseweb="radio"] {{
+      background: #3B2D6B !important;
+      border-color: {PRIMARY} !important;
+  }}
+  /* Hide the actual radio dot — we only want the label */
+  [data-testid="stRadio"] [data-baseweb="radio"] div:first-child {{
+      display: none !important;
+  }}
+  [data-testid="stRadio"] label {{
+      font-size: 0.88rem !important;
+      font-weight: 500 !important;
+      color: {TEXT_MAIN} !important;
+      text-transform: none !important;
+      letter-spacing: 0 !important;
+      cursor: pointer;
+  }}
+
   /* ── Scrollbar — subtle dark ── */
   ::-webkit-scrollbar {{ width: 6px; height: 6px; }}
   ::-webkit-scrollbar-track {{ background: {PAGE_BG}; }}
@@ -722,17 +753,12 @@ elif "Dimension" in page:
     st.caption("Explore any single dimension across all cities and regions.")
     st.markdown('<div class="page-divider"></div>', unsafe_allow_html=True)
 
-    # Dimension picker as horizontal pills
-    dim_cols = st.columns(len(DIMS))
-    for i, (d, lbl, icon) in enumerate(zip(DIMS, DIM_LABELS, DIM_ICONS)):
-        dim_cols[i].markdown(
-            f'<div style="text-align:center;font-size:1.4rem">{icon}</div>'
-            f'<div style="text-align:center;font-size:0.78rem;color:{TEXT_MUTED}">{lbl}</div>',
-            unsafe_allow_html=True,
-        )
-    sel_dim = st.selectbox(
-        "Dimension", options=DIMS,
-        format_func=lambda x: x.replace("_score","").title(),
+    # Single clickable radio — icon + label, horizontal layout, no dropdown
+    sel_dim = st.radio(
+        "Dimension",
+        options=DIMS,
+        format_func=lambda x: f"{DIM_ICONS[DIMS.index(x)]}  {x.replace('_score','').title()}",
+        horizontal=True,
         label_visibility="collapsed",
     )
     label = sel_dim.replace("_score","").title()
