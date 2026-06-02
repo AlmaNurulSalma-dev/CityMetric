@@ -1,57 +1,70 @@
-=== Cluster Assignments (Python sklearn K-Means K=5) ===
+=== WEKA SimpleKMeans K=5 Cluster Assignments ===
+Algorithm  : weka.clusterers.SimpleKMeans
+Parameters : numClusters=5, seed=42, maxIterations=300
+Distance   : EuclideanDistance
+Input file : weka/cities_numeric.arff
 
-Tokyo -> Cluster 3 (Digital Leaders)
-Shanghai -> Cluster 0 (Established Hubs)
-Beijing -> Cluster 0 (Established Hubs)
-Seoul -> Cluster 2 (Rising Stars)
-Singapore -> Cluster 3 (Digital Leaders)
-Hong Kong -> Cluster 3 (Digital Leaders)
-Bangkok -> Cluster 1 (Balanced Cities)
-Jakarta -> Cluster 4 (Emerging Markets)
-Mumbai -> Cluster 4 (Emerging Markets)
-Delhi -> Cluster 2 (Rising Stars)
-Bangalore -> Cluster 2 (Rising Stars)
-Kuala Lumpur -> Cluster 2 (Rising Stars)
-Manila -> Cluster 4 (Emerging Markets)
-Ho Chi Minh City -> Cluster 1 (Balanced Cities)
-Sydney -> Cluster 3 (Digital Leaders)
-Melbourne -> Cluster 3 (Digital Leaders)
-London -> Cluster 0 (Established Hubs)
-Paris -> Cluster 3 (Digital Leaders)
-Berlin -> Cluster 3 (Digital Leaders)
-Amsterdam -> Cluster 3 (Digital Leaders)
-Madrid -> Cluster 1 (Balanced Cities)
-Barcelona -> Cluster 1 (Balanced Cities)
-Rome -> Cluster 1 (Balanced Cities)
-Milan -> Cluster 1 (Balanced Cities)
-Vienna -> Cluster 3 (Digital Leaders)
-Zurich -> Cluster 3 (Digital Leaders)
-Stockholm -> Cluster 3 (Digital Leaders)
-Oslo -> Cluster 3 (Digital Leaders)
-Copenhagen -> Cluster 3 (Digital Leaders)
-Helsinki -> Cluster 3 (Digital Leaders)
-Warsaw -> Cluster 1 (Balanced Cities)
-Prague -> Cluster 1 (Balanced Cities)
-Budapest -> Cluster 1 (Balanced Cities)
-Lisbon -> Cluster 1 (Balanced Cities)
-New York -> Cluster 0 (Established Hubs)
-San Francisco -> Cluster 0 (Established Hubs)
-Los Angeles -> Cluster 0 (Established Hubs)
-Chicago -> Cluster 0 (Established Hubs)
-Toronto -> Cluster 3 (Digital Leaders)
-Vancouver -> Cluster 3 (Digital Leaders)
-Mexico City -> Cluster 4 (Emerging Markets)
-Sao Paulo -> Cluster 4 (Emerging Markets)
-Buenos Aires -> Cluster 1 (Balanced Cities)
-Bogota -> Cluster 4 (Emerging Markets)
-Lima -> Cluster 4 (Emerging Markets)
-Santiago -> Cluster 1 (Balanced Cities)
-Dubai -> Cluster 3 (Digital Leaders)
-Abu Dhabi -> Cluster 3 (Digital Leaders)
-Tel Aviv -> Cluster 0 (Established Hubs)
-Istanbul -> Cluster 0 (Established Hubs)
-Cairo -> Cluster 4 (Emerging Markets)
-Nairobi -> Cluster 4 (Emerging Markets)
-Lagos -> Cluster 4 (Emerging Markets)
-Johannesburg -> Cluster 2 (Rising Stars)
-Casablanca -> Cluster 4 (Emerging Markets)
+--- Cluster 0 (13 cities) ---
+  Bangkok (Thailand) -> Cluster 0
+  Barcelona (Spain) -> Cluster 0
+  Bogota (Colombia) -> Cluster 0
+  Buenos Aires (Argentina) -> Cluster 0
+  Casablanca (Morocco) -> Cluster 0
+  Lima (Peru) -> Cluster 0
+  Lisbon (Portugal) -> Cluster 0
+  Mexico City (Mexico) -> Cluster 0
+  Milan (Italy) -> Cluster 0
+  Rome (Italy) -> Cluster 0
+  Santiago (Chile) -> Cluster 0
+  Sao Paulo (Brazil) -> Cluster 0
+  Warsaw (Poland) -> Cluster 0
+
+--- Cluster 1 (18 cities) ---
+  Amsterdam (Netherlands) -> Cluster 1
+  Berlin (Germany) -> Cluster 1
+  Budapest (Hungary) -> Cluster 1
+  Copenhagen (Denmark) -> Cluster 1
+  Helsinki (Finland) -> Cluster 1
+  Kuala Lumpur (Malaysia) -> Cluster 1
+  Madrid (Spain) -> Cluster 1
+  Melbourne (Australia) -> Cluster 1
+  Oslo (Norway) -> Cluster 1
+  Paris (France) -> Cluster 1
+  Prague (Czechia) -> Cluster 1
+  Seoul (South Korea) -> Cluster 1
+  Stockholm (Sweden) -> Cluster 1
+  Sydney (Australia) -> Cluster 1
+  Toronto (Canada) -> Cluster 1
+  Vancouver (Canada) -> Cluster 1
+  Vienna (Austria) -> Cluster 1
+  Zurich (Switzerland) -> Cluster 1
+
+--- Cluster 2 (11 cities) ---
+  Chicago (USA) -> Cluster 2
+  Hong Kong (Hong Kong) -> Cluster 2
+  Istanbul (Turkey) -> Cluster 2
+  London (United Kingdom) -> Cluster 2
+  Los Angeles (USA) -> Cluster 2
+  New York (USA) -> Cluster 2
+  San Francisco (USA) -> Cluster 2
+  Shanghai (China) -> Cluster 2
+  Singapore (Singapore) -> Cluster 2
+  Tel Aviv (Israel) -> Cluster 2
+  Tokyo (Japan) -> Cluster 2
+
+--- Cluster 3 (5 cities) ---
+  Abu Dhabi (UAE) -> Cluster 3
+  Beijing (China) -> Cluster 3
+  Dubai (UAE) -> Cluster 3
+  Ho Chi Minh City (Vietnam) -> Cluster 3
+  Manila (Philippines) -> Cluster 3
+
+--- Cluster 4 (8 cities) ---
+  Bangalore (India) -> Cluster 4
+  Cairo (Egypt) -> Cluster 4
+  Delhi (India) -> Cluster 4
+  Jakarta (Indonesia) -> Cluster 4
+  Johannesburg (South Africa) -> Cluster 4
+  Lagos (Nigeria) -> Cluster 4
+  Mumbai (India) -> Cluster 4
+  Nairobi (Kenya) -> Cluster 4

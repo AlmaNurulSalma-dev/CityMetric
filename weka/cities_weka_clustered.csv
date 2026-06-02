@@ -1,0 +1,56 @@
+city,country,region,latitude,longitude,population,affordability_score,digital_score,startup_score,urban_score,innovation_score,talent_score,growth_score,opportunity_index,weka_cluster_raw,weka_cluster_id
+Tokyo,Japan,Asia-Pacific,35.685,139.751389,31480498.0,5.97,7.07,5.0,7.66,3.86,5.03,3.09,5.44,cluster3,2
+Shanghai,China,Asia-Pacific,31.045556,121.399722,14608512.0,4.73,6.35,5.0,6.4,5.29,4.78,2.64,5.03,cluster3,2
+Beijing,China,Asia-Pacific,29.346443,116.198733,5104475.0,4.76,6.29,5.0,3.95,5.29,4.78,3.23,4.72,cluster4,3
+Seoul,South Korea,Asia-Pacific,37.5985,126.9783,10323448.0,7.18,5.14,5.0,4.83,2.18,4.1,3.21,4.44,cluster2,1
+Singapore,Singapore,Asia-Pacific,1.2930556,103.8558333,3547809.0,4.85,6.78,5.0,7.03,2.71,5.5,6.7,5.59,cluster3,2
+Hong Kong,Hong Kong,Asia-Pacific,22.2833333,114.15,5104475.0,4.25,9.0,5.0,7.28,3.08,5.59,5.71,5.82,cluster3,2
+Bangkok,Thailand,Asia-Pacific,13.753979,100.501444,5104475.0,4.55,5.7,5.0,5.14,2.21,3.93,2.41,3.99,cluster1,0
+Jakarta,Indonesia,Asia-Pacific,-6.174444,106.829444,8540306.0,4.58,3.28,5.0,5.94,1.13,3.32,2.34,3.43,cluster5,4
+Mumbai,India,Asia-Pacific,18.975,72.82583299999999,5104475.0,4.86,2.43,5.0,4.47,1.78,3.01,2.45,3.17,cluster5,4
+Delhi,India,Asia-Pacific,28.666667,77.216667,10928270.0,6.1,2.45,5.0,4.9,1.78,2.99,2.23,3.41,cluster5,4
+Bangalore,India,Asia-Pacific,12.983333,77.583333,4931603.0,7.69,2.41,5.0,4.43,1.78,3.01,2.45,3.63,cluster5,4
+Kuala Lumpur,Malaysia,Asia-Pacific,3.166667,101.7,1453978.0,6.65,5.55,5.0,5.55,2.19,3.76,4.91,4.77,cluster2,1
+Manila,Philippines,Asia-Pacific,14.6042,120.9822,10443877.0,4.26,3.6,5.0,6.25,2.75,3.75,4.4,4.17,cluster4,3
+Ho Chi Minh City,Vietnam,Asia-Pacific,10.75,106.666667,3467426.0,4.61,5.44,5.0,4.23,2.14,3.45,3.62,3.92,cluster4,3
+Sydney,Australia,Asia-Pacific,-33.861481,151.205475,4394585.0,6.14,6.66,5.0,6.39,2.37,6.92,4.8,5.55,cluster2,1
+Melbourne,Australia,Asia-Pacific,-37.813938,144.963425,3730212.0,6.53,6.65,5.0,7.26,2.37,6.92,4.71,5.74,cluster2,1
+London,United Kingdom,Europe,51.514125,-0.093689,7421228.0,3.96,7.32,5.0,6.05,4.61,6.5,4.46,5.48,cluster3,2
+Paris,France,Europe,48.866667,2.333333,2110694.0,4.94,7.26,5.0,4.8,2.94,6.03,4.52,5.08,cluster2,1
+Berlin,Germany,Europe,52.516667000000005,13.4,3398362.0,5.37,7.3,5.0,4.61,2.89,6.74,3.58,5.08,cluster2,1
+Amsterdam,Netherlands,Europe,52.35,4.916667,745811.0,4.7,7.21,5.0,5.0,2.32,6.54,4.53,5.05,cluster2,1
+Madrid,Spain,Europe,40.408566,-3.69222,3102644.0,5.08,6.8,5.0,5.35,1.64,6.5,3.3,4.78,cluster2,1
+Barcelona,Spain,Europe,41.398371,2.1741,1570378.0,4.83,6.77,5.0,5.78,1.64,6.51,3.3,4.8,cluster1,0
+Rome,Italy,Europe,41.9,12.483333,2643736.0,4.27,6.03,5.0,5.33,1.98,5.66,2.4,4.28,cluster1,0
+Milan,Italy,Europe,45.466667,9.2,1156903.0,3.96,6.03,5.0,4.01,1.98,5.67,2.06,3.95,cluster1,0
+Vienna,Austria,Europe,48.2,16.366667,1569315.0,5.89,6.45,5.0,3.61,2.41,6.53,3.51,4.73,cluster2,1
+Zurich,Switzerland,Europe,47.366667,8.55,346185.0,6.65,7.54,5.0,3.96,3.16,5.9,5.49,5.45,cluster2,1
+Stockholm,Sweden,Europe,59.333333,18.05,1253309.0,5.46,7.4,5.0,3.78,3.19,6.74,4.47,5.17,cluster2,1
+Oslo,Norway,Europe,59.916667,10.75,808690.0,5.43,7.38,5.0,2.92,2.37,6.8,5.68,5.1,cluster2,1
+Copenhagen,Denmark,Europe,55.666667,12.583333,1089958.0,4.98,7.77,5.0,4.24,2.19,6.61,4.09,4.98,cluster2,1
+Helsinki,Finland,Europe,60.17555600000001,24.934167,558457.0,6.11,7.03,5.0,2.45,2.37,6.95,3.45,4.73,cluster2,1
+Warsaw,Poland,Europe,52.25,21.0,1651676.0,4.82,6.09,5.0,2.8,1.71,5.77,0.8,3.66,cluster1,0
+Prague,Czechia,Europe,50.083333,14.466667,1154508.0,4.88,6.72,5.0,3.37,2.15,5.63,2.61,4.23,cluster2,1
+Budapest,Hungary,Europe,47.5,19.083333,1708088.0,5.25,6.71,5.0,3.63,1.72,5.19,1.91,4.07,cluster2,1
+Lisbon,Portugal,Europe,38.716667,-9.133333,517798.0,3.74,6.63,5.0,5.07,1.39,5.66,3.8,4.38,cluster1,0
+New York,USA,Americas,40.7141667,-74.0063889,8107916.0,3.89,6.19,5.0,7.32,5.95,8.13,4.55,6.01,cluster3,2
+San Francisco,USA,Americas,37.775,-122.4183333,732072.0,4.08,6.82,5.0,5.67,5.95,8.49,4.58,5.93,cluster3,2
+Los Angeles,USA,Americas,34.0522222,-118.2427778,3877129.0,5.34,6.22,5.0,6.87,5.95,8.23,4.6,6.2,cluster3,2
+Chicago,USA,Americas,41.85,-87.65,2841952.0,5.68,6.31,5.0,3.75,5.95,8.27,5.18,5.86,cluster3,2
+Toronto,Canada,Americas,43.666667,-79.416667,4612187.0,4.73,6.72,5.0,3.93,2.52,6.02,4.68,4.77,cluster2,1
+Vancouver,Canada,Americas,49.25,-123.133333,1837970.0,4.95,6.59,5.0,4.71,2.52,6.05,4.68,4.92,cluster2,1
+Mexico City,Mexico,Americas,19.4326,-99.1332,9209944.0,4.29,4.78,5.0,7.94,1.3,4.35,2.82,4.25,cluster1,0
+Sao Paulo,Brazil,Americas,-23.473293,-46.665803,10021437.0,4.04,5.2,5.0,8.84,1.88,5.17,2.54,4.61,cluster1,0
+Buenos Aires,Argentina,Americas,8.859575999999999,-83.50224200000001,11680.0,4.82,5.99,5.0,6.15,1.25,6.56,1.95,4.45,cluster1,0
+Bogota,Colombia,Americas,4.649178,-74.062827,7102602.0,4.45,5.05,5.0,7.07,1.17,4.96,2.74,4.24,cluster1,0
+Lima,Peru,Americas,-12.05,-77.05,7646786.0,4.48,4.12,5.0,8.34,1.2,5.68,2.34,4.36,cluster1,0
+Santiago,Chile,Americas,-33.45,-70.666667,4837248.0,4.55,6.1,5.0,7.07,0.92,6.44,2.74,4.64,cluster1,0
+Dubai,UAE,Middle East,25.258172,55.304717,1137376.0,5.78,5.51,5.0,5.09,4.26,5.19,4.96,5.13,cluster4,3
+Abu Dhabi,UAE,Middle East,24.466667,54.36666700000001,603687.0,5.9,5.45,5.0,5.04,4.26,5.19,5.42,5.21,cluster4,3
+Tel Aviv,Israel,Middle East,32.066666999999995,34.766667,1137376.0,5.87,5.51,5.0,6.82,4.22,5.33,5.25,5.5,cluster3,2
+Istanbul,Turkey,Middle East,41.018611,28.964722,9797536.0,4.07,6.94,5.0,7.32,4.3,5.04,5.25,5.49,cluster3,2
+Cairo,Egypt,Africa & Middle East,30.05,31.25,7734602.0,4.67,3.23,5.0,6.32,1.24,2.43,2.61,3.42,cluster5,4
+Nairobi,Kenya,Africa & Middle East,-1.2833333,36.8166667,2750561.0,4.66,1.17,5.0,5.31,0.99,1.76,3.35,2.87,cluster5,4
+Lagos,Nigeria,Africa & Middle East,6.453056,3.395833,8789133.0,3.19,1.27,5.0,6.33,0.88,0.42,3.68,2.63,cluster5,4
+Johannesburg,South Africa,Africa & Middle East,-26.205171,28.049815,2026466.0,7.1,4.01,5.0,6.09,0.9,4.1,3.18,4.23,cluster5,4
+Casablanca,Morocco,Africa & Middle East,33.592779,-7.619157,3609698.0,4.71,4.72,5.0,6.33,1.04,3.07,2.59,3.74,cluster1,0
