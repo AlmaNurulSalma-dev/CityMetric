@@ -26,15 +26,16 @@ st.set_page_config(
 ROOT     = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data" / "processed"
 
-# ─── Design System ────────────────────────────────────────────────────────────
-# One unified purple-based palette — everything derives from this
-PRIMARY      = "#7C3AED"   # rich purple — headlines, accents
-PRIMARY_SOFT = "#EDE9FE"   # lavender tint — hover, selected states
-SIDEBAR_BG   = "#18103A"   # deep navy-purple — sidebar
-CARD_BG      = "#FFFFFF"   # pure white — cards
-PAGE_BG      = "#F8F7FF"   # barely-tinted white — main background
-TEXT_MAIN    = "#1A1A2E"   # near-black — primary text
-TEXT_MUTED   = "#6B7280"   # grey — captions, labels
+# ─── Design System — Dark Mode ────────────────────────────────────────────────
+PRIMARY      = "#C4B5FD"   # light lavender — headlines & accents on dark bg
+PRIMARY_SOFT = "#3B2D6B"   # dark lavender tint — subtle fills
+SIDEBAR_BG   = "#06040F"   # near-black with purple tint — sidebar
+CARD_BG      = "#14102A"   # dark purple card surface
+PAGE_BG      = "#0D0B1E"   # deep dark navy-purple — main background
+TEXT_MAIN    = "#F1EEFF"   # near-white with slight lavender — primary text
+TEXT_MUTED   = "#8B83B5"   # muted purple-grey — captions, labels
+BORDER_COL   = "#2A2350"   # subtle dark border
+GRID_COL     = "#231D45"   # chart gridlines
 
 # Cluster palette: clearly distinct, accessible, still on-brand
 CLUSTER_COLORS = {
@@ -60,79 +61,113 @@ DIM_ICONS  = ["💰","📡","🏙️","💡","👩‍💻","📈"]
 # Truly distinct colors for comparison overlay (not pastels)
 COMPARE_COLORS = ["#DB2777","#6D28D9","#0891B2","#D97706","#059669","#DC2626"]
 
-# ─── CSS ──────────────────────────────────────────────────────────────────────
+# ─── CSS — Dark Mode ──────────────────────────────────────────────────────────
 st.markdown(f"""
 <style>
-  /* ── Global ── */
-  .stApp {{ background-color: {PAGE_BG}; }}
+  /* ── Global dark background ── */
+  .stApp, .stApp > div {{ background-color: {PAGE_BG} !important; }}
   .block-container {{ padding-top: 1.5rem; padding-bottom: 2rem; }}
 
-  /* ── Typography hierarchy ── */
+  /* ── Body text — high contrast on dark bg ── */
+  body, .stApp {{ color: {TEXT_MAIN} !important; }}
   h1 {{ font-size: 1.9rem !important; font-weight: 700 !important;
-        color: {TEXT_MAIN} !important; letter-spacing: -0.02em; margin-bottom: 0.2rem !important; }}
+        color: {TEXT_MAIN} !important; letter-spacing: -0.02em;
+        margin-bottom: 0.2rem !important; }}
   h2 {{ font-size: 1.25rem !important; font-weight: 600 !important;
         color: {TEXT_MAIN} !important; margin-top: 1.4rem !important; }}
   h3 {{ font-size: 1.05rem !important; font-weight: 600 !important;
         color: {PRIMARY} !important; }}
-  p, li {{ color: {TEXT_MAIN}; line-height: 1.65; }}
-  .stCaption, [data-testid="stCaption"] {{ color: {TEXT_MUTED} !important; font-size: 0.8rem; }}
+  p, li, span, label {{ color: {TEXT_MAIN} !important; line-height: 1.65; }}
+  .stCaption, [data-testid="stCaption"] {{
+      color: {TEXT_MUTED} !important; font-size: 0.8rem; }}
+  a {{ color: {PRIMARY} !important; }}
 
-  /* ── Metric cards ── */
+  /* ── Metric cards — dark ── */
   [data-testid="stMetric"] {{
-      background: {CARD_BG};
-      border: 1px solid #E5E7EB;
-      border-radius: 12px;
-      padding: 14px 18px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      background: {CARD_BG} !important;
+      border: 1px solid {BORDER_COL};
+      border-radius: 12px; padding: 14px 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
   }}
-  [data-testid="stMetricLabel"] {{ font-size: 0.75rem !important;
-      font-weight: 500 !important; color: {TEXT_MUTED} !important;
+  [data-testid="stMetricLabel"] {{
+      font-size: 0.75rem !important; font-weight: 500 !important;
+      color: {TEXT_MUTED} !important;
       text-transform: uppercase; letter-spacing: 0.05em; }}
-  [data-testid="stMetricValue"] {{ font-size: 1.6rem !important;
-      font-weight: 700 !important; color: {TEXT_MAIN} !important; }}
+  [data-testid="stMetricValue"] {{
+      font-size: 1.6rem !important; font-weight: 700 !important;
+      color: {TEXT_MAIN} !important; }}
 
-  /* ── Sidebar ── */
+  /* ── Sidebar — dark ── */
   [data-testid="stSidebar"] {{
       background-color: {SIDEBAR_BG} !important;
-      border-right: 1px solid rgba(255,255,255,0.06);
+      border-right: 1px solid {BORDER_COL};
   }}
   [data-testid="stSidebar"] * {{ color: #D1D5DB !important; }}
-  [data-testid="stSidebar"] h1,
-  [data-testid="stSidebar"] h2,
-  [data-testid="stSidebar"] h3,
-  [data-testid="stSidebar"] strong {{ color: #F3F4F6 !important; }}
-  [data-testid="stSidebar"] label {{ color: #9CA3AF !important;
-      font-size: 0.75rem !important; text-transform: uppercase; letter-spacing: 0.06em; }}
-  [data-testid="stSidebar"] .stRadio label {{ text-transform: none !important;
-      font-size: 0.9rem !important; color: #D1D5DB !important; letter-spacing: 0; }}
-  [data-testid="stSidebar"] [data-testid="stRadioGroup"] {{
-      gap: 0 !important;
-  }}
-  /* Nav item hover */
-  [data-testid="stSidebar"] [data-testid="stRadioGroup"] label:hover {{
-      color: #F3F4F6 !important;
-  }}
-  /* Divider */
-  [data-testid="stSidebar"] hr {{ border-color: rgba(255,255,255,0.1); }}
+  [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2,
+  [data-testid="stSidebar"] h3, [data-testid="stSidebar"] strong {{
+      color: #F1EEFF !important; }}
+  [data-testid="stSidebar"] label {{
+      color: {TEXT_MUTED} !important; font-size: 0.75rem !important;
+      text-transform: uppercase; letter-spacing: 0.06em; }}
+  [data-testid="stSidebar"] .stRadio label {{
+      text-transform: none !important; font-size: 0.9rem !important;
+      color: #D1D5DB !important; letter-spacing: 0; }}
+  [data-testid="stSidebar"] hr {{ border-color: {BORDER_COL}; }}
 
-  /* ── Tabs ── */
+  /* ── Multiselect & selectbox inputs — dark ── */
+  [data-baseweb="input"], [data-baseweb="select"],
+  [data-baseweb="popover"], [data-testid="stMultiSelect"] > div,
+  [data-testid="stSelectbox"] > div > div {{
+      background-color: #1E1840 !important;
+      border-color: {BORDER_COL} !important;
+  }}
+  /* ── Multiselect TAGS — girly pink/rose ── */
+  [data-baseweb="tag"] {{
+      background-color: #831843 !important;
+      border: 1px solid #F472B6 !important;
+      border-radius: 20px !important;
+  }}
+  [data-baseweb="tag"] span {{
+      color: #FCE7F3 !important;
+      font-weight: 600 !important;
+      font-size: 12px !important;
+  }}
+  [data-baseweb="tag"] [role="presentation"] svg,
+  [data-baseweb="tag"] button svg {{
+      fill: #F9A8D4 !important;
+  }}
+  /* Dropdown options */
+  [data-baseweb="menu"] {{
+      background-color: #1A1438 !important;
+      border: 1px solid {BORDER_COL} !important;
+  }}
+  [data-baseweb="menu"] li {{ color: {TEXT_MAIN} !important; }}
+  [data-baseweb="menu"] li:hover {{ background-color: #2D2460 !important; }}
+  /* Selectbox text */
+  [data-testid="stSelectbox"] span, [data-testid="stMultiSelect"] span {{
+      color: {TEXT_MAIN} !important;
+  }}
+
+  /* ── Tabs — dark ── */
   .stTabs [data-baseweb="tab-list"] {{
-      background: #EEEBFF; border-radius: 10px; padding: 3px; gap: 2px;
+      background: #1A1438; border-radius: 10px; padding: 3px; gap: 2px;
   }}
   .stTabs [data-baseweb="tab"] {{
-      border-radius: 8px; font-weight: 500; color: {TEXT_MUTED};
+      border-radius: 8px; font-weight: 500;
+      color: {TEXT_MUTED} !important;
       font-size: 0.88rem; padding: 6px 16px;
   }}
   .stTabs [aria-selected="true"] {{
-      background: {CARD_BG} !important; color: {PRIMARY} !important;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08); font-weight: 600;
+      background: #2D2460 !important;
+      color: {PRIMARY} !important;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.4);
+      font-weight: 600;
   }}
 
-  /* ── Cards / containers ── */
+  /* ── Cards ── */
   .metric-card {{
-      background: {CARD_BG}; border: 1px solid #E5E7EB;
+      background: {CARD_BG}; border: 1px solid {BORDER_COL};
       border-radius: 12px; padding: 14px 18px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
   }}
   .insight-card {{
       border-radius: 10px; padding: 10px 14px; margin: 5px 0;
@@ -143,26 +178,49 @@ st.markdown(f"""
       padding: 3px 12px; font-size: 12px; font-weight: 600;
   }}
 
-  /* ── Dataframe ── */
-  [data-testid="stDataFrame"] {{ border-radius: 10px; overflow: hidden; }}
+  /* ── Slider — dark ── */
+  [data-testid="stSlider"] [data-baseweb="slider"] [role="slider"] {{
+      background: #BE185D !important;
+  }}
+  [data-testid="stSlider"] [data-testid="stTickBarMin"],
+  [data-testid="stSlider"] [data-testid="stTickBarMax"] {{
+      color: {TEXT_MUTED} !important;
+  }}
 
-  /* ── Expander ── */
+  /* ── Dataframe — dark ── */
+  [data-testid="stDataFrame"] {{ border-radius: 10px; overflow: hidden; }}
+  [data-testid="stDataFrame"] * {{ color: {TEXT_MAIN} !important; }}
+
+  /* ── Expander — dark ── */
+  [data-testid="stExpander"] {{
+      background: {CARD_BG} !important;
+      border: 1px solid {BORDER_COL} !important;
+      border-radius: 10px !important;
+  }}
   [data-testid="stExpander"] summary {{
       font-size: 0.82rem !important; font-weight: 500 !important;
-      color: #9CA3AF !important; text-transform: uppercase; letter-spacing: 0.05em;
+      color: {TEXT_MUTED} !important;
+      text-transform: uppercase; letter-spacing: 0.05em;
   }}
-  [data-testid="stExpander"] {{ border: none !important;
-      border-top: 1px solid rgba(255,255,255,0.08) !important;
+  [data-testid="stExpander"] summary:hover {{
+      color: {PRIMARY} !important;
   }}
 
-  /* ── Selectbox / multiselect inside sidebar ── */
-  [data-testid="stSidebar"] [data-testid="stMultiSelect"] span,
-  [data-testid="stSidebar"] [data-testid="stSelectbox"] span {{
-      color: #1A1A2E !important;
-  }}
+  /* ── Selectbox arrow ── */
+  [data-testid="stSelectbox"] svg {{ fill: {TEXT_MUTED} !important; }}
+
+  /* ── Info / warning boxes ── */
+  [data-testid="stInfo"] {{ background: #1E1840 !important;
+      border-color: {PRIMARY} !important; color: {TEXT_MAIN} !important; }}
 
   /* ── Page divider ── */
-  .page-divider {{ height: 1px; background: #E5E7EB; margin: 1.5rem 0; }}
+  .page-divider {{ height: 1px; background: {BORDER_COL}; margin: 1.5rem 0; }}
+
+  /* ── Scrollbar — subtle dark ── */
+  ::-webkit-scrollbar {{ width: 6px; height: 6px; }}
+  ::-webkit-scrollbar-track {{ background: {PAGE_BG}; }}
+  ::-webkit-scrollbar-thumb {{ background: #3B2D6B; border-radius: 3px; }}
+  ::-webkit-scrollbar-thumb:hover {{ background: {PRIMARY}; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -193,8 +251,22 @@ def empty_state(msg="No cities match your current filters."):
 
 
 def chart_defaults():
-    return dict(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(family="Inter, sans-serif", color=TEXT_MAIN))
+    return dict(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(family="Inter, sans-serif", color=TEXT_MAIN),
+    )
+
+def dark_axes():
+    """Shared axis style for dark mode — high-contrast tick labels, subtle grid."""
+    ax = dict(
+        gridcolor=GRID_COL,
+        linecolor=BORDER_COL,
+        tickfont=dict(color=TEXT_MUTED, size=11),
+        title_font=dict(color=TEXT_MAIN, size=12),
+        zerolinecolor=BORDER_COL,
+    )
+    return ax
 
 
 CHART_H = 460   # standard chart height
@@ -319,7 +391,7 @@ if "Overview" in page:
                 color="cluster_name", color_discrete_map=color_map,
                 orientation="h", text="opportunity_index",
                 labels={"opportunity_index":"Opportunity Index","city":"","cluster_name":"Cluster"},
-                template="plotly_white",
+                template="plotly_dark",
             )
             fig.update_traces(
                 texttemplate="%{x:.2f}", textposition="outside",
@@ -329,7 +401,7 @@ if "Overview" in page:
                 **chart_defaults(),
                 height=CHART_H,
                 xaxis=dict(range=[0, top20["opportunity_index"].max() + 0.8],
-                           showgrid=True, gridcolor="#F3F4F6"),
+                           showgrid=True, gridcolor=GRID_COL),
                 yaxis=dict(showgrid=False),
                 legend=dict(orientation="h", y=-0.1, x=0,
                             font=dict(size=11), title=""),
@@ -343,7 +415,7 @@ if "Overview" in page:
             fig2 = px.pie(
                 counts, values="count", names="cluster_name",
                 color="cluster_name", color_discrete_map=color_map,
-                hole=0.52, template="plotly_white",
+                hole=0.52, template="plotly_dark",
             )
             fig2.update_traces(
                 textposition="outside", textinfo="label+percent",
@@ -363,10 +435,10 @@ if "Overview" in page:
             fig3 = px.bar(
                 reg, x="opportunity_index", y="region", orientation="h",
                 color="opportunity_index",
-                color_continuous_scale=[[0, "#A78BFA"],[0.5,"#7C3AED"],[1,"#4C1D95"]],
+                color_continuous_scale=[[0,"#3B2D6B"],[0.5,"#7C3AED"],[1,"#C4B5FD"]],
                 text="opportunity_index",
                 labels={"opportunity_index":"Avg Score","region":""},
-                template="plotly_white",
+                template="plotly_dark",
             )
             fig3.update_traces(
                 texttemplate="%{x:.2f}", textposition="outside",
@@ -572,7 +644,7 @@ elif "Cluster Analysis" in page:
             **chart_defaults(),
             polar=dict(
                 radialaxis=dict(range=[0,10], tickfont=dict(size=11),
-                                gridcolor="#E5E7EB", linecolor="#E5E7EB"),
+                                gridcolor=GRID_COL, linecolor=BORDER_COL),
                 angularaxis=dict(tickfont=dict(size=13, color=TEXT_MAIN)),
                 bgcolor="rgba(0,0,0,0)",
             ),
@@ -628,8 +700,9 @@ elif "Cluster Analysis" in page:
         fig_all.update_layout(**{
             pk: dict(
                 radialaxis=dict(range=[0,10], tickfont_size=8,
-                                gridcolor="#E5E7EB", linecolor="#E5E7EB"),
-                angularaxis=dict(tickfont=dict(size=9)),
+                                gridcolor=GRID_COL, linecolor=BORDER_COL,
+                                tickfont=dict(color=TEXT_MUTED)),
+                angularaxis=dict(tickfont=dict(size=9, color=TEXT_MUTED)),
                 bgcolor="rgba(0,0,0,0)",
             )
         })
@@ -678,7 +751,7 @@ elif "Dimension" in page:
                 color="cluster_name", color_discrete_map=color_map,
                 orientation="h", text=sel_dim,
                 labels={sel_dim: f"{label} Score","city":""},
-                template="plotly_white",
+                template="plotly_dark",
             )
             fig.update_traces(
                 texttemplate="%{x:.2f}", textposition="outside",
@@ -688,7 +761,7 @@ elif "Dimension" in page:
                 **chart_defaults(),
                 height=CHART_H,
                 xaxis=dict(range=[0, top_dim[sel_dim].max() + 0.8],
-                           showgrid=True, gridcolor="#F3F4F6"),
+                           showgrid=True, gridcolor=GRID_COL),
                 yaxis=dict(showgrid=False),
                 legend=dict(title="", orientation="h", y=-0.1, font=dict(size=11)),
                 margin=dict(l=0, r=40, t=10, b=40),
@@ -701,10 +774,10 @@ elif "Dimension" in page:
             fig2 = px.bar(
                 reg_dim, x=sel_dim, y="region", orientation="h",
                 color=sel_dim,
-                color_continuous_scale=[[0,"#A78BFA"],[1,"#4C1D95"]],
+                color_continuous_scale=[[0,"#3B2D6B"],[1,"#C4B5FD"]],
                 text=sel_dim,
                 labels={sel_dim: f"{label} Score","region":""},
-                template="plotly_white",
+                template="plotly_dark",
             )
             fig2.update_traces(
                 texttemplate="%{x:.2f}", textposition="outside",
@@ -726,7 +799,7 @@ elif "Dimension" in page:
                 color="cluster_name", color_discrete_map=color_map,
                 points="all", hover_data=["city"],
                 labels={sel_dim: f"{label} Score","cluster_name":""},
-                template="plotly_white",
+                template="plotly_dark",
             )
             fig3.update_layout(
                 **chart_defaults(),
@@ -742,7 +815,7 @@ elif "Dimension" in page:
         corr = df[DIMS].corr().round(2)
         fig4 = go.Figure(go.Heatmap(
             z=corr.values, x=DIM_LABELS, y=DIM_LABELS,
-            colorscale=[[0,"#67E8F9"],[0.5,"#F8F7FF"],[1,"#7C3AED"]],
+            colorscale=[[0,"#0891B2"],[0.5,"#1A1438"],[1,"#7C3AED"]],
             zmin=-1, zmax=1,
             text=corr.values, texttemplate="%{text:.2f}",
             textfont=dict(size=12),
@@ -802,7 +875,7 @@ elif "Comparison" in page:
             **chart_defaults(),
             polar=dict(
                 radialaxis=dict(range=[0,10], tickfont=dict(size=11),
-                                gridcolor="#E5E7EB", linecolor="#E5E7EB"),
+                                gridcolor=GRID_COL, linecolor=BORDER_COL),
                 angularaxis=dict(tickfont=dict(size=13, color=TEXT_MAIN)),
                 bgcolor="rgba(0,0,0,0)",
             ),
@@ -826,14 +899,14 @@ elif "Comparison" in page:
                 melt, x="dimension", y="score", color="city",
                 barmode="group", color_discrete_map=city_colors,
                 labels={"dimension":"","score":"Score (0–10)","city":""},
-                template="plotly_white",
+                template="plotly_dark",
             )
             fig_bar.update_layout(
                 **chart_defaults(),
                 height=CHART_H_SM + 40,
                 legend=dict(orientation="h", y=-0.2, font=dict(size=11)),
                 xaxis=dict(showgrid=False),
-                yaxis=dict(range=[0,11], gridcolor="#F3F4F6"),
+                yaxis=dict(range=[0,11], gridcolor=GRID_COL),
                 margin=dict(t=10, b=60),
             )
             st.plotly_chart(fig_bar, use_container_width=True)
@@ -957,7 +1030,7 @@ elif "Insights" in page:
                         "growth_score":":.2f","cluster_name":False},
             labels={"digital_score":"Digital Score","innovation_score":"Innovation Score",
                     "cluster_name":"Cluster"},
-            template="plotly_white",
+            template="plotly_dark",
         )
         fig_scatter.update_traces(
             textposition="top center", textfont=dict(size=8, color=TEXT_MUTED),
@@ -965,8 +1038,8 @@ elif "Insights" in page:
         fig_scatter.update_layout(
             **chart_defaults(),
             height=CHART_H,
-            xaxis=dict(gridcolor="#F3F4F6", title_font=dict(size=12)),
-            yaxis=dict(gridcolor="#F3F4F6", title_font=dict(size=12)),
+            xaxis=dict(gridcolor=GRID_COL, title_font=dict(size=12)),
+            yaxis=dict(gridcolor=GRID_COL, title_font=dict(size=12)),
             legend=dict(title="", font=dict(size=11)),
             margin=dict(t=10, b=10),
         )
