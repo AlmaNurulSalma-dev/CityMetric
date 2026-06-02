@@ -209,75 +209,195 @@ if page == "🏠 Overview":
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "🗺️ World Map":
     st.title("🗺️ City Intelligence Map")
-    st.caption("Click any marker to see full city details. Toggle layers in the top-right.")
-
-    try:
-        import folium
-        from streamlit_folium import st_folium
-        from folium.plugins import HeatMap, Fullscreen, MiniMap
-
-        m = folium.Map(location=[20, 10], zoom_start=2,
-                       tiles="CartoDB positron", prefer_canvas=True)
-        Fullscreen().add_to(m)
-
-        cluster_layer = folium.FeatureGroup(name="City Clusters", show=True)
-        for _, row in df.iterrows():
-            c     = int(row["cluster"])
-            color = CLUSTER_COLORS.get(c, "#CCC")
-            cname = row["cluster_name"]
-            radius = 7 + min(row["opportunity_index"] * 1.2, 8)
-            popup_html = f"""
-            <div style="font-family:sans-serif;min-width:200px">
-              <h4 style="margin:0;color:#333">{row['city']}, {row['country']}</h4>
-              <hr style="margin:4px 0"><b>Cluster:</b> {cname}<br>
-              <b>Opportunity:</b> {row['opportunity_index']:.2f}/10<br><hr style="margin:4px 0">
-              <table style="font-size:12px;width:100%">
-                {''.join(f"<tr><td>{l}</td><td align=right><b>{row[d]:.1f}</b></td></tr>"
-                         for d,l in zip(DIMS, DIM_LABELS))}
-              </table></div>"""
-            folium.CircleMarker(
-                location=[row["latitude"], row["longitude"]],
-                radius=radius, color=CLUSTER_DARK.get(c,"#999"),
-                weight=1.5, fill=True, fill_color=color, fill_opacity=0.82,
-                popup=folium.Popup(popup_html, max_width=240),
-                tooltip=f"{row['city']} — {row['opportunity_index']:.2f}/10",
-            ).add_to(cluster_layer)
-        cluster_layer.add_to(m)
-
-        heat_data = [[r["latitude"], r["longitude"], r[highlight]]
-                     for _, r in df.iterrows()]
-        heat_layer = folium.FeatureGroup(name="Heatmap", show=False)
-        HeatMap(heat_data, radius=40, blur=25,
-                gradient={"0.3":"#B4D7FF","0.6":"#C8A2E8","1.0":"#FFB6D9"}
-                ).add_to(heat_layer)
-        heat_layer.add_to(m)
-        folium.LayerControl(collapsed=False).add_to(m)
-
-        st_folium(m, width=None, height=580, returned_objects=[])
-
-    except ImportError:
-        st.warning("streamlit-folium not available. Showing Plotly map instead.")
-        fig_map = px.scatter_geo(
-            df, lat="latitude", lon="longitude",
-            color="cluster_name", color_discrete_map=color_map,
-            size="opportunity_index", hover_name="city",
-            hover_data={"latitude":False,"longitude":False,
-                        "opportunity_index":":.2f","country":True},
-            projection="natural earth", template="plotly_white",
-        )
-        fig_map.update_layout(height=550, paper_bgcolor="rgba(0,0,0,0)",
-                               geo=dict(bgcolor="rgba(0,0,0,0)"))
-        st.plotly_chart(fig_map, use_container_width=True)
 
     # Cluster colour legend
-    st.markdown("**Cluster colours:**")
-    cols = st.columns(5)
+    legend_cols = st.columns(5)
     for i, (c, name) in enumerate(cluster_names.items()):
-        cols[i].markdown(
-            f'<span style="background:{CLUSTER_COLORS[c]};padding:4px 10px;'
-            f'border-radius:12px;font-size:13px">C{c}: {name}</span>',
+        legend_cols[i].markdown(
+            f'<span style="background:{CLUSTER_COLORS[c]};padding:4px 12px;'
+            f'border-radius:12px;font-size:12px;font-weight:600">'
+            f'C{c}: {name}</span>',
             unsafe_allow_html=True,
         )
+    st.markdown("")
+
+    tab1, tab2, tab3 = st.tabs(["🗺️ Interactive Map", "🌐 3D Globe", "🔥 Heatmap"])
+
+    # ── TAB 1: Plotly Mapbox ─────────────────────────────────────────────────
+    with tab1:
+        st.caption("Hover over any city for details · Zoom & pan · Click legend to filter clusters")
+
+        # Build hover text with all scores
+        df["hover_text"] = df.apply(
+            lambda r: (
+                f"<b>{r['city']}, {r['country']}</b><br>"
+                f"Cluster: {r['cluster_name']}<br>"
+                f"Opportunity: {r['opportunity_index']:.2f}/10<br>"
+                f"─────────────────<br>"
+                f"Affordability: {r['affordability_score']:.1f} &nbsp;"
+                f"Digital: {r['digital_score']:.1f}<br>"
+                f"Urban: {r['urban_score']:.1f} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                f"Innovation: {r['innovation_score']:.1f}<br>"
+                f"Talent: {r['talent_score']:.1f} &nbsp;&nbsp;&nbsp;&nbsp;"
+                f"Growth: {r['growth_score']:.1f}"
+            ), axis=1
+        )
+
+        fig_map = px.scatter_mapbox(
+            df,
+            lat="latitude", lon="longitude",
+            color="cluster_name",
+            color_discrete_map=color_map,
+            size="opportunity_index",
+            size_max=22,
+            hover_name="city",
+            custom_data=["hover_text"],
+            zoom=1.5,
+            center={"lat": 20, "lon": 10},
+            mapbox_style="open-street-map",
+            template="plotly_white",
+            height=580,
+        )
+        fig_map.update_traces(
+            hovertemplate="%{customdata[0]}<extra></extra>",
+            marker=dict(opacity=0.85, sizemin=6),
+        )
+        fig_map.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=0, r=0, t=0, b=0),
+            legend=dict(
+                title="Cluster",
+                bgcolor="rgba(255,255,255,0.85)",
+                bordercolor="#E0D0F0",
+                borderwidth=1,
+                x=0.01, y=0.99,
+            ),
+        )
+        st.plotly_chart(fig_map, use_container_width=True)
+
+    # ── TAB 2: PyDeck 3D Globe ───────────────────────────────────────────────
+    with tab2:
+        st.caption("Drag to rotate · Scroll to zoom · Hover for city info · Column height = Opportunity Index")
+        import pydeck as pdk
+
+        # Hex colours → [R, G, B] for pydeck
+        def hex_to_rgb(h):
+            h = h.lstrip("#")
+            return [int(h[i:i+2], 16) for i in (0, 2, 4)]
+
+        df_deck = df.copy()
+        df_deck["color"]       = df_deck["cluster"].map(lambda c: hex_to_rgb(CLUSTER_COLORS[c]))
+        df_deck["color_dark"]  = df_deck["cluster"].map(lambda c: hex_to_rgb(CLUSTER_DARK[c]))
+        df_deck["elevation"]   = df_deck["opportunity_index"] * 120000
+        df_deck["radius"]      = df_deck["opportunity_index"] * 60000 + 80000
+
+        column_layer = pdk.Layer(
+            "ColumnLayer",
+            data=df_deck,
+            get_position=["longitude", "latitude"],
+            get_elevation="elevation",
+            elevation_scale=1,
+            radius=80000,
+            get_fill_color="color",
+            pickable=True,
+            auto_highlight=True,
+            extruded=True,
+        )
+
+        scatter_layer = pdk.Layer(
+            "ScatterplotLayer",
+            data=df_deck,
+            get_position=["longitude", "latitude"],
+            get_radius="radius",
+            get_fill_color="color",
+            get_line_color="color_dark",
+            line_width_min_pixels=1,
+            pickable=True,
+            opacity=0.5,
+        )
+
+        view = pdk.ViewState(
+            latitude=20, longitude=10,
+            zoom=1.2, pitch=45, bearing=0,
+        )
+
+        tooltip = {
+            "html": (
+                "<b>{city}, {country}</b><br/>"
+                "Cluster: {cluster_name}<br/>"
+                "Opportunity: {opportunity_index}/10<br/>"
+                "Afford: {affordability_score} | Digital: {digital_score}<br/>"
+                "Innovation: {innovation_score} | Talent: {talent_score}"
+            ),
+            "style": {
+                "background": "rgba(50,20,80,0.92)",
+                "color": "#fff",
+                "font-family": "sans-serif",
+                "font-size": "13px",
+                "padding": "10px",
+                "border-radius": "8px",
+            },
+        }
+
+        deck = pdk.Deck(
+            layers=[scatter_layer, column_layer],
+            initial_view_state=view,
+            tooltip=tooltip,
+            map_style="mapbox://styles/mapbox/dark-v10",
+        )
+        st.pydeck_chart(deck, use_container_width=True, height=580)
+
+    # ── TAB 3: Heatmap ───────────────────────────────────────────────────────
+    with tab3:
+        st.caption(f"Heatmap intensity = {highlight.replace('_',' ').replace('score','').title().strip()} score")
+
+        dim_choice = st.selectbox(
+            "Heatmap dimension",
+            ["opportunity_index"] + DIMS,
+            format_func=lambda x: x.replace("_score","").replace("_"," ").title(),
+            key="heatmap_dim",
+        )
+
+        fig_heat = px.density_mapbox(
+            df,
+            lat="latitude", lon="longitude",
+            z=dim_choice,
+            radius=60,
+            zoom=1.3,
+            center={"lat": 20, "lon": 10},
+            mapbox_style="carto-darkmatter",
+            color_continuous_scale=["#1a0533","#C8A2E8","#FFB6D9","#FFE8B6"],
+            template="plotly_white",
+            height=560,
+            hover_name="city",
+            hover_data={"latitude":False,"longitude":False,dim_choice:":.2f"},
+        )
+        fig_heat.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=0, r=0, t=0, b=0),
+            coloraxis_colorbar=dict(title=dim_choice.replace("_score","").title()),
+        )
+        st.plotly_chart(fig_heat, use_container_width=True)
+
+        # Scatter overlay on top of heatmap context
+        st.caption("City positions for reference:")
+        fig_over = px.scatter_mapbox(
+            df, lat="latitude", lon="longitude",
+            color=dim_choice, size=dim_choice,
+            size_max=18, zoom=1.3,
+            center={"lat": 20, "lon": 10},
+            hover_name="city",
+            hover_data={dim_choice:":.2f","cluster_name":True,
+                        "latitude":False,"longitude":False},
+            mapbox_style="carto-positron",
+            color_continuous_scale=["#B4D7FF","#C8A2E8","#FFB6D9"],
+            template="plotly_white", height=420,
+        )
+        fig_over.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=0, r=0, t=0, b=0),
+        )
+        st.plotly_chart(fig_over, use_container_width=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
