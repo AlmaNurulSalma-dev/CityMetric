@@ -36,7 +36,7 @@ BORDER_COL   = "#2A2A42"   # Dark subtle borders
 PRIMARY      = "#9B9FD9"   # Soft lilac — interactive elements
 PRIMARY_LIGHT= "#C7CBE8"   # Light lilac accents
 TEXT_MAIN    = "#E8E4FF"   # Light text on dark
-TEXT_MUTED   = "#A8A5BE"   # Muted text
+TEXT_MUTED   = "#C4C0E0"   # Muted text — brighter for contrast
 TEXT_ON_DARK = "#E8E4FF"   # Text on dark sidebar
 SHADOW       = "0 2px 16px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.2)"
 SHADOW_HOVER = "0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.25)"
@@ -150,7 +150,7 @@ p, li, td, th {{
 [data-testid="stSidebar"] * {{ color: {TEXT_ON_DARK} !important; }}
 [data-testid="stSidebar"] label {{
     font-size: 0.68rem !important; font-weight: 600 !important;
-    color: rgba(237,233,255,0.45) !important;
+    color: rgba(237,233,255,0.70) !important;
     text-transform: uppercase !important; letter-spacing: 0.1em !important;
     font-family: 'Inter', sans-serif !important;
 }}
@@ -262,7 +262,7 @@ p, li, td, th {{
 }}
 [data-testid="stExpander"] summary {{
     font-size: 0.72rem !important; font-weight: 600 !important;
-    color: rgba(237,233,255,0.5) !important;
+    color: rgba(237,233,255,0.75) !important;
     text-transform: uppercase !important; letter-spacing: 0.08em !important;
     font-family: 'Inter', sans-serif !important;
 }}
