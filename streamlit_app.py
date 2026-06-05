@@ -311,6 +311,24 @@ p, li, td, th {{
     text-transform: uppercase; font-family: 'Inter', sans-serif;
 }}
 
+/* ── Image sizing ── */
+.hero-image {{
+    width: 100%; max-width: 1400px; height: 280px;
+    object-fit: cover; border-radius: 12px;
+    display: block; margin: 0 auto;
+}}
+.cluster-image {{
+    width: 100%; max-width: 400px; height: 260px;
+    object-fit: cover; border-radius: 12px;
+    display: block; margin: 0 auto;
+}}
+.about-image {{
+    width: 100%; max-width: 1200px; height: 220px;
+    object-fit: cover; border-radius: 12px;
+    display: block; margin: 0 auto;
+}}
+img {{ max-width: 100%; height: auto; }}
+
 /* ── Hero section ── */
 .hero-text {{ position: relative; z-index: 2; }}
 
@@ -352,12 +370,19 @@ def empty_state(msg="No cities match your current filters."):
         unsafe_allow_html=True,
     )
 
-def show_image(filename, fallback_text, fallback_color="#B4B8E0", height=180):
+def show_image(filename, fallback_text, fallback_color="#B4B8E0", img_class="cluster-image"):
     """Show image if exists, else styled placeholder with instructions."""
     path = ASSETS / filename
     if path.exists():
-        st.image(str(path), use_container_width=True)
+        st.markdown(
+            f'<img src="data:image/jpeg;base64,{get_image_base64(str(path))}" '
+            f'class="{img_class}" alt="{filename}"/>',
+            unsafe_allow_html=True,
+        )
     else:
+        # Determine height based on image class
+        height_map = {"hero-image": 280, "cluster-image": 260, "about-image": 220}
+        height = height_map.get(img_class, 180)
         rv, gv, bv = hex_to_rgb(fallback_color)
         st.markdown(
             f'<div class="img-placeholder" style="height:{height}px;'
@@ -366,6 +391,12 @@ def show_image(filename, fallback_text, fallback_color="#B4B8E0", height=180):
             f'[ {fallback_text} ]</div>',
             unsafe_allow_html=True,
         )
+
+def get_image_base64(image_path):
+    """Convert image to base64 for HTML embedding."""
+    import base64
+    with open(image_path, 'rb') as f:
+        return base64.b64encode(f.read()).decode()
 
 def chart_defaults():
     return dict(
@@ -468,7 +499,7 @@ if page == "Overview":
     show_image(
         "hero_city.jpg",
         "Place hero image here — assets/hero_city.jpg (1400x280px aerial city night)",
-        "#7275B3", height=200,
+        "#7275B3", img_class="hero-image",
     )
     st.markdown('<div style="margin-top:1.5rem"></div>', unsafe_allow_html=True)
 
@@ -748,7 +779,7 @@ elif page == "Cluster Analysis":
         show_image(
             f"cluster_{sel_c}.jpg",
             f"assets/cluster_{sel_c}.jpg · 400x260px",
-            color, height=260,
+            color, img_class="cluster-image",
         )
         st.markdown(
             f'<div style="margin-top:12px">'
@@ -1200,7 +1231,7 @@ elif page == "About":
     show_image(
         "about_banner.jpg",
         "assets/about_banner.jpg — 1200x220px · aerial city or data art",
-        "#A7D8DE", height=180,
+        "#A7D8DE", img_class="about-image",
     )
     st.markdown('<div style="margin-top:1.5rem"></div>', unsafe_allow_html=True)
 
