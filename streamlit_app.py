@@ -410,61 +410,200 @@ def get_image_base64(image_path):
         return base64.b64encode(f.read()).decode()
 
 def render_insight_card(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val):
-    """Render modern luxury-style insight card."""
-    return f'''
-    <div style="
-        background: linear-gradient(135deg, {cluster_dark}15 0%, {cluster_dark}05 100%);
-        border: 1px solid {cluster_color}40;
-        border-left: 4px solid {cluster_color};
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 12px;
-        transition: all 0.3s ease;
-        font-family: 'Inter', sans-serif;
-    ">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-            <div>
+    """Render luxury-style insight card with background image and dark gradient overlay."""
+    import os
+
+    # Try to load city image
+    city_lower = city.lower().replace(" ", "_")
+    img_path = ASSETS / "cities" / "insights" / f"{city_lower}.jpg"
+
+    has_image = img_path.exists()
+
+    if has_image:
+        try:
+            img_base64 = get_image_base64(str(img_path))
+            bg_image = f"url(data:image/jpeg;base64,{img_base64})"
+        except:
+            has_image = False
+
+    # Build card HTML
+    if has_image:
+        card_html = f'''
+        <div style="
+            position: relative;
+            width: 100%;
+            height: 300px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        ">
+            <!-- Background Image -->
+            <div style="
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background-image: {bg_image};
+                background-size: cover;
+                background-position: center;
+            "></div>
+
+            <!-- Dark Gradient Overlay -->
+            <div style="
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: linear-gradient(180deg,
+                    rgba(0,0,0,0) 0%,
+                    rgba(0,0,0,0.3) 50%,
+                    rgba(0,0,0,0.7) 100%);
+            "></div>
+
+            <!-- Content -->
+            <div style="
+                position: absolute;
+                bottom: 0; left: 0; right: 0;
+                padding: 24px;
+                color: white;
+                z-index: 2;
+            ">
+                <!-- City Name & Country -->
+                <div style="margin-bottom: 16px;">
+                    <div style="
+                        font-family: 'Plus Jakarta Sans', sans-serif;
+                        font-size: 24px;
+                        font-weight: 800;
+                        color: #FFFFFF;
+                        margin-bottom: 2px;
+                        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+                    ">{city}</div>
+                    <div style="
+                        font-size: 13px;
+                        color: rgba(255,255,255,0.85);
+                        font-weight: 500;
+                    ">{country}</div>
+                </div>
+
+                <!-- Metrics & Badge -->
                 <div style="
-                    font-family: 'Plus Jakarta Sans', sans-serif;
-                    font-size: 16px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-end;
+                    gap: 12px;
+                ">
+                    <div style="flex: 1;">
+                        <div style="
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            gap: 12px;
+                        ">
+                            <div>
+                                <div style="
+                                    font-size: 11px;
+                                    color: rgba(255,255,255,0.7);
+                                    font-weight: 600;
+                                    text-transform: uppercase;
+                                    letter-spacing: 0.05em;
+                                    margin-bottom: 4px;
+                                ">{metric1_label}</div>
+                                <div style="
+                                    font-size: 18px;
+                                    font-weight: 700;
+                                    color: #FFFFFF;
+                                    font-family: 'Plus Jakarta Sans', sans-serif;
+                                ">{metric1_val:.1f}</div>
+                            </div>
+                            <div>
+                                <div style="
+                                    font-size: 11px;
+                                    color: rgba(255,255,255,0.7);
+                                    font-weight: 600;
+                                    text-transform: uppercase;
+                                    letter-spacing: 0.05em;
+                                    margin-bottom: 4px;
+                                ">{metric2_label}</div>
+                                <div style="
+                                    font-size: 18px;
+                                    font-weight: 700;
+                                    color: #FFFFFF;
+                                    font-family: 'Plus Jakarta Sans', sans-serif;
+                                ">{metric2_val:.1f}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rating Badge -->
+                    <div style="
+                        background: #FFD700;
+                        color: #000000;
+                        padding: 8px 14px;
+                        border-radius: 24px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        white-space: nowrap;
+                        box-shadow: 0 4px 12px rgba(255,215,0,0.4);
+                    ">★ {metric1_val:.1f}</div>
+                </div>
+            </div>
+        </div>
+        '''
+    else:
+        # Fallback: Solid color card (when image not available)
+        card_html = f'''
+        <div style="
+            background: linear-gradient(135deg, {cluster_dark}15 0%, {cluster_dark}05 100%);
+            border: 1px solid {cluster_color}40;
+            border-left: 4px solid {cluster_color};
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        ">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                <div>
+                    <div style="
+                        font-family: 'Plus Jakarta Sans', sans-serif;
+                        font-size: 16px;
+                        font-weight: 700;
+                        color: {TEXT_MAIN};
+                        margin-bottom: 2px;
+                    ">{city}</div>
+                    <div style="
+                        font-size: 12px;
+                        color: {TEXT_MUTED};
+                        font-weight: 500;
+                    ">{country}</div>
+                </div>
+                <div style="
+                    background: #FFD700;
+                    color: #000000;
+                    padding: 4px 10px;
+                    border-radius: 20px;
+                    font-size: 11px;
                     font-weight: 700;
-                    color: {TEXT_MAIN};
-                    margin-bottom: 2px;
-                ">{city}</div>
-                <div style="
-                    font-size: 12px;
-                    color: {TEXT_MUTED};
-                    font-weight: 500;
-                ">{country}</div>
+                    white-space: nowrap;
+                ">★ {metric1_val:.2f}</div>
             </div>
             <div style="
-                background: #FFD700;
-                color: #000000;
-                padding: 4px 10px;
-                border-radius: 20px;
-                font-size: 11px;
-                font-weight: 700;
-                white-space: nowrap;
-            ">★ {metric1_val:.2f}</div>
-        </div>
-        <div style="
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            padding-top: 10px;
-            border-top: 1px solid {cluster_color}30;
-        ">
-            <div style="font-size: 11px;">
-                <span style="color: {TEXT_MUTED}; font-weight: 600;">{metric1_label}</span><br/>
-                <span style="color: {TEXT_MAIN}; font-weight: 700; font-size: 13px;">{metric1_val:.2f}</span>
-            </div>
-            <div style="font-size: 11px;">
-                <span style="color: {TEXT_MUTED}; font-weight: 600;">{metric2_label}</span><br/>
-                <span style="color: {TEXT_MAIN}; font-weight: 700; font-size: 13px;">{metric2_val:.2f}</span>
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                padding-top: 10px;
+                border-top: 1px solid {cluster_color}30;
+            ">
+                <div style="font-size: 11px;">
+                    <span style="color: {TEXT_MUTED}; font-weight: 600;">{metric1_label}</span><br/>
+                    <span style="color: {TEXT_MAIN}; font-weight: 700; font-size: 13px;">{metric1_val:.2f}</span>
+                </div>
+                <div style="font-size: 11px;">
+                    <span style="color: {TEXT_MUTED}; font-weight: 600;">{metric2_label}</span><br/>
+                    <span style="color: {TEXT_MAIN}; font-weight: 700; font-size: 13px;">{metric2_val:.2f}</span>
+                </div>
             </div>
         </div>
-    </div>
-    '''
+        '''
+
+    return card_html
 
 def chart_defaults():
     return dict(
