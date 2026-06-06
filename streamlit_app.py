@@ -60,7 +60,7 @@ CLUSTER_DARK = {
 }
 
 # Truly distinct for comparison overlay
-COMPARE_COLORS = ["#C2547A","#5254A3","#3A9DAA","#C26B42","#4A8A47","#9B59B6"]
+COMPARE_COLORS = ["#C2547A","#5254A3","#3A9DAA","#C26B42","#4A8A47","#9B59B6","#E89966","#A7D8DE"]
 
 DIMS       = ["affordability_score","digital_score","urban_score",
               "innovation_score","talent_score","growth_score"]
@@ -241,7 +241,7 @@ p, li, td, th {{
     background: linear-gradient(135deg, #7B7FBD 0%, #9B9FD9 100%) !important;
     border: 1.5px solid #7B7FBD !important;
     border-radius: 100px !important;
-    color: #0F0E1F !important;
+    color: #000000 !important;
     font-size: 0.8rem !important; font-weight: 700 !important;
     font-family: 'Plus Jakarta Sans', sans-serif !important;
     box-shadow: 0 2px 12px rgba(155,159,217,0.35) !important;
@@ -438,8 +438,8 @@ def render_insight_card(city, country, cluster_color, cluster_dark, metric1_labe
                 ">{country}</div>
             </div>
             <div style="
-                background: {cluster_color};
-                color: {TEXT_MAIN};
+                background: #FFD700;
+                color: #000000;
                 padding: 4px 10px;
                 border-radius: 20px;
                 font-size: 11px;
@@ -678,7 +678,7 @@ elif page == "World Map":
     for i, c in enumerate(all_clusters):
         legend_cols[i].markdown(
             f'<span class="cluster-badge" style="background:{CLUSTER_COLORS[c]};'
-            f'color:{TEXT_MAIN};border:2px solid {CLUSTER_DARK[c]};font-weight:700;padding:6px 12px;'
+            f'color:#000000;border:2px solid {CLUSTER_DARK[c]};font-weight:700;padding:6px 12px;'
             f'font-size:13px">{cluster_names[c]}</span>',
             unsafe_allow_html=True,
         )
@@ -715,7 +715,6 @@ elif page == "World Map":
                     marker=dict(opacity=0.88, sizemin=7,
                                line=dict(width=0),
                                ),
-                    hoverlabel=dict(namelength=-1),
                 )
                 fig_map.update_layout(
                     **chart_defaults(),
@@ -855,9 +854,9 @@ elif page == "Cluster Analysis":
         )
         st.markdown(
             f'<div style="margin-top:12px">'
-            f'<span class="cluster-badge" style="background:{color};color:{CLUSTER_DARK[sel_c]};'
+            f'<span class="cluster-badge" style="background:{color};color:#000000;'
             f'border:1.5px solid {CLUSTER_DARK[sel_c]}44">{cluster_names[sel_c]}</span>'
-            f'<div style="font-size:0.78rem;color:{TEXT_MUTED};margin-top:8px;'
+            f'<div style="font-size:0.78rem;color:#000000;margin-top:8px;'
             f'font-family:Inter,sans-serif;line-height:1.6">'
             f'{len(cdata)} cities · {len(cdata)/len(df_all)*100:.0f}% of dataset</div>'
             f'</div>',
@@ -1355,7 +1354,7 @@ elif page == "About":
         for t, d in stack:
             st.markdown(
                 f'<div style="display:flex;gap:10px;padding:6px 0;align-items:baseline">'
-                f'<code style="background:{PRIMARY};color:#FFFFFF;padding:4px 10px;'
+                f'<code style="background:{PRIMARY};color:#000000;padding:4px 10px;'
                 f'border-radius:6px;font-size:11px;font-weight:700;min-width:100px;'
                 f'text-align:center">{t}</code>'
                 f'<span style="font-size:0.82rem;color:{TEXT_MAIN};'
