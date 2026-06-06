@@ -734,9 +734,7 @@ elif page == "World Map":
                 )
                 fig_map.update_traces(
                     hovertemplate="%{customdata[0]}<extra></extra>",
-                    marker=dict(opacity=0.88, sizemin=7,
-                               line=dict(width=0),
-                               ),
+                    marker=dict(opacity=0.88, sizemin=7),
                 )
                 fig_map.update_layout(
                     **chart_defaults(),
