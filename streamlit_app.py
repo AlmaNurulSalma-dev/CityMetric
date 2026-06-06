@@ -62,9 +62,9 @@ CLUSTER_DARK = {
 # Truly distinct for comparison overlay
 COMPARE_COLORS = ["#C2547A","#5254A3","#3A9DAA","#C26B42","#4A8A47","#9B59B6","#E89966","#A7D8DE"]
 
-DIMS       = ["affordability_score","digital_score","urban_score",
+DIMS       = ["digital_score","urban_score","affordability_score",
               "innovation_score","talent_score","growth_score"]
-DIM_LABELS = ["Affordability","Digital","Urban","Innovation","Talent","Growth"]
+DIM_LABELS = ["Digital","Urban","Affordability","Innovation","Talent","Growth"]
 DIM_ICONS  = ["","","","","",""]   # no icons — text only
 
 
