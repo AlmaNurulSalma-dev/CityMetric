@@ -443,7 +443,7 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
             height: 55%;
             position: relative;
             display: block;
-            background: linear-gradient(135deg, {cluster_dark} 0%, {cluster_color}40 100%);
+            background: linear-gradient(135deg, #2D2D4D 0%, #1A1A2E 100%);
         }}
 
         .card-image img {{
