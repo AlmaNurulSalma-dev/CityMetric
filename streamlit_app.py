@@ -937,7 +937,7 @@ elif page == "Cluster Analysis":
             )
         })
     fig_all.update_layout(
-        **chart_defaults(), height=340, showlegend=False,
+        **chart_defaults(), height=280, showlegend=False,
         margin=dict(t=30, b=10),
     )
     st.plotly_chart(fig_all, use_container_width=True)
