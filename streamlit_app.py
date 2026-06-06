@@ -448,29 +448,31 @@ p, li, td, th {{
     border: 1px solid rgba(255, 215, 0, 0.4);
     font-weight: 600;
 }}
-.card-button {{
-    width: 100%;
-    padding: 11px 0;
-    background: linear-gradient(135deg, #E8E4FF 0%, #F5F3FF 100%);
-    color: #1A1A2E;
-    border: none;
+.card-cluster-trend {{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 6px;
+    margin-bottom: 8px;
+}}
+
+.cluster-badge {{
+    display: inline-block;
+    background: rgba(255, 215, 0, 0.15);
+    color: #FFD700;
+    padding: 4px 10px;
     border-radius: 12px;
-    font-size: 13px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}}
+
+.trend-indicator {{
+    font-size: 18px;
     font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(232, 228, 255, 0.25);
-    margin-top: 8px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    letter-spacing: 0.3px;
-}}
-.card-button:hover {{
-    background: linear-gradient(135deg, #FFFFFF 0%, #F8F6FF 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(232, 228, 255, 0.4);
-}}
-.card-button:active {{
-    transform: translateY(0);
+    margin-left: 4px;
 }}
 
 .card-metrics {{
@@ -724,8 +726,8 @@ def get_image_base64(image_path):
     with open(image_path, 'rb') as f:
         return base64.b64encode(f.read()).decode()
 
-def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, image_base64=None):
-    """Return HTML for UX-optimized insight card with flexbox layout + full metrics."""
+def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, image_base64=None, cluster_label=None, trend=None):
+    """Return HTML for UX-optimized insight card with cluster label and trend indicator."""
     rating_value = f"{metric1_val:.1f}"
     metric1_display = f"{metric1_val:.2f}"
     metric2_display = f"{metric2_val:.2f}"
@@ -738,7 +740,18 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
     else:
         image_html = '<div style="background: #2D2D4D;"></div>'
 
-    # Card HTML with all metrics displayed
+    # Build cluster + trend badges
+    cluster_trend_html = ''
+    if cluster_label or trend:
+        cluster_trend_html = '<div class="card-cluster-trend">'
+        if cluster_label:
+            cluster_trend_html += '<span class="cluster-badge">' + cluster_label + '</span>'
+        if trend:
+            trend_color = '#4AE574' if trend == '↑' else '#FF6B6B'
+            cluster_trend_html += '<span class="trend-indicator" style="color: ' + trend_color + ';">' + trend + '</span>'
+        cluster_trend_html += '</div>'
+
+    # Card HTML with cluster label, trend, and all metrics (no Explore button)
     card_html = (
         '<div class="insight-card">'
         '<div class="card-image">' + image_html + '</div>'
@@ -746,6 +759,7 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
         '<div>'
         '<div class="card-title">' + city + '</div>'
         '<div class="card-subtitle">' + country + '</div>'
+        cluster_trend_html +
         '<div class="card-badges">'
         '<div class="badge-rating">'
         '<span class="badge-rating-value">' + rating_value + '</span>'
@@ -763,15 +777,14 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
         '</div>'
         '</div>'
         '</div>'
-        '<button class="card-button">Explore ' + city + '</button>'
         '</div>'
         '</div>'
     )
 
     return card_html
 
-def render_insight_card(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val):
-    """Render insight card - luxury booking style with image."""
+def render_insight_card(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, cluster_num=None, growth_score=None):
+    """Render insight card - luxury booking style with image, cluster label, and trend."""
     # Try to load city image using base64 encoding
     city_lower = city.lower().replace(" ", "_")
     img_path = ASSETS / "cities" / "insights" / f"{city_lower}.jpg"
@@ -784,6 +797,16 @@ def render_insight_card(city, country, cluster_color, cluster_dark, metric1_labe
         except:
             img_base64 = None
 
+    # Get cluster name if cluster_num provided
+    cluster_label = None
+    if cluster_num is not None and cluster_num in cluster_names:
+        cluster_label = cluster_names[cluster_num]
+
+    # Determine trend indicator (↑ for high growth, ↓ for low)
+    trend = None
+    if growth_score is not None:
+        trend = "↑" if growth_score >= 5.0 else "↓"
+
     # Return dict with data for rendering in Streamlit
     return {
         "city": city,
@@ -795,7 +818,9 @@ def render_insight_card(city, country, cluster_color, cluster_dark, metric1_labe
         "metric1_val": metric1_val,
         "metric2_label": metric2_label,
         "metric2_val": metric2_val,
-        "html": render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, img_base64)
+        "cluster_label": cluster_label,
+        "trend": trend,
+        "html": render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, img_base64, cluster_label, trend)
     }
 
 def chart_defaults():
@@ -1513,7 +1538,8 @@ elif page == "Insights":
             card_data = render_insight_card(
                 r["city"], r["country"], c, d,
                 "Opportunity", r["opportunity_index"],
-                "Affordability", r["affordability_score"]
+                "Affordability", r["affordability_score"],
+                r["cluster"], r["growth_score"]
             )
             # Display luxury booking card with image embedded
             st.markdown(card_data["html"], unsafe_allow_html=True)
@@ -1529,7 +1555,8 @@ elif page == "Insights":
             card_data = render_insight_card(
                 r["city"], r["country"], c, d,
                 "Growth", r["growth_score"],
-                "Opportunity", r["opportunity_index"]
+                "Opportunity", r["opportunity_index"],
+                r["cluster"], r["growth_score"]
             )
             # Display luxury booking card with image embedded
             st.markdown(card_data["html"], unsafe_allow_html=True)
@@ -1545,7 +1572,8 @@ elif page == "Insights":
             card_data = render_insight_card(
                 r["city"], r["country"], c, d,
                 "Innovation", r["innovation_score"],
-                "Talent", r["talent_score"]
+                "Talent", r["talent_score"],
+                r["cluster"], r["growth_score"]
             )
             # Display luxury booking card with image embedded
             st.markdown(card_data["html"], unsafe_allow_html=True)
