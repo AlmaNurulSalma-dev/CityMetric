@@ -621,8 +621,8 @@ elif page == "World Map":
     for i, c in enumerate(all_clusters):
         legend_cols[i].markdown(
             f'<span class="cluster-badge" style="background:{CLUSTER_COLORS[c]};'
-            f'color:{CLUSTER_DARK[c]};border:1.5px solid {CLUSTER_DARK[c]}44">'
-            f'{cluster_names[c]}</span>',
+            f'color:{TEXT_MAIN};border:2px solid {CLUSTER_DARK[c]};font-weight:700;padding:6px 12px;'
+            f'font-size:13px">{cluster_names[c]}</span>',
             unsafe_allow_html=True,
         )
     st.markdown("")
@@ -655,15 +655,19 @@ elif page == "World Map":
                 )
                 fig_map.update_traces(
                     hovertemplate="%{customdata[0]}<extra></extra>",
-                    marker=dict(opacity=0.88, sizemin=7),
+                    marker=dict(opacity=0.88, sizemin=7,
+                               line=dict(width=0),
+                               ),
+                    hoverlabel=dict(namelength=-1),
                 )
                 fig_map.update_layout(
                     **chart_defaults(),
                     margin=dict(l=0,r=0,t=0,b=0),
                     legend=dict(
-                        title="", bgcolor="rgba(255,255,255,0.92)",
-                        bordercolor=BORDER_COL, borderwidth=1,
-                        x=0.01, y=0.99, font=dict(size=12),
+                        title="", bgcolor="rgba(42,42,42,0.9)",
+                        bordercolor="#888888", borderwidth=1,
+                        font=dict(size=12, color=TEXT_MAIN),
+                        x=0.01, y=0.99,
                     ),
                 )
                 st.plotly_chart(fig_map, use_container_width=True)
@@ -1012,7 +1016,7 @@ elif page == "City Comparison":
     st.caption("Select 2–6 cities to compare across all dimensions.")
     divider()
 
-    default_cities = ["Bangkok","Lisbon","Singapore","Berlin","Seoul"]
+    default_cities = ["Shanghai","Jakarta","Nanjing","Singapore","Lisbon","Seoul","Tokyo","New York"]
     cities_to_compare = st.multiselect(
         "Choose cities",
         options=sorted(df_all["city"].unique()),
@@ -1297,10 +1301,10 @@ elif page == "About":
         for t, d in stack:
             st.markdown(
                 f'<div style="display:flex;gap:10px;padding:6px 0;align-items:baseline">'
-                f'<code style="background:{PRIMARY_LIGHT};color:{PRIMARY};padding:2px 8px;'
-                f'border-radius:5px;font-size:11px;font-weight:700;min-width:80px;'
+                f'<code style="background:{PRIMARY};color:#FFFFFF;padding:4px 10px;'
+                f'border-radius:6px;font-size:11px;font-weight:700;min-width:100px;'
                 f'text-align:center">{t}</code>'
-                f'<span style="font-size:0.82rem;color:{TEXT_MUTED};'
+                f'<span style="font-size:0.82rem;color:{TEXT_MAIN};'
                 f'font-family:Inter,sans-serif">{d}</span></div>',
                 unsafe_allow_html=True,
             )
