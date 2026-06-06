@@ -473,6 +473,36 @@ p, li, td, th {{
     transform: translateY(0);
 }}
 
+.card-metrics {{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-top: 10px;
+    margin-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}}
+
+.metric-item {{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}}
+
+.metric-label {{
+    font-size: 10px;
+    color: #9090B0;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}}
+
+.metric-value {{
+    font-size: 14px;
+    color: #FFFFFF;
+    font-weight: 700;
+    line-height: 1.2;
+}}
+
 /* ── Responsive adjustments ── */
 @media (max-width: 1200px) {{
     .insight-card {{
@@ -524,6 +554,17 @@ p, li, td, th {{
     .card-subtitle {{
         font-size: 12px;
     }}
+    .card-metrics {{
+        gap: 8px;
+        margin-top: 6px;
+        padding-top: 8px;
+    }}
+    .metric-label {{
+        font-size: 9px;
+    }}
+    .metric-value {{
+        font-size: 13px;
+    }}
     .card-button {{
         padding: 12px 0;
         font-size: 13px;
@@ -558,9 +599,16 @@ p, li, td, th {{
         padding: 4px 9px;
         font-size: 10px;
     }}
-    .badge-duration {{
-        padding: 4px 8px;
+    .card-metrics {{
+        gap: 8px;
+        margin-top: 8px;
+        padding-top: 8px;
+    }}
+    .metric-label {{
         font-size: 9px;
+    }}
+    .metric-value {{
+        font-size: 12px;
     }}
     .card-button {{
         padding: 10px 0;
@@ -602,9 +650,16 @@ p, li, td, th {{
     .badge-rating-stars {{
         font-size: 9px;
     }}
-    .badge-duration {{
-        padding: 3px 7px;
+    .card-metrics {{
+        gap: 6px;
+        margin-top: 6px;
+        padding-top: 6px;
+    }}
+    .metric-label {{
         font-size: 8px;
+    }}
+    .metric-value {{
+        font-size: 11px;
     }}
     .card-button {{
         padding: 9px 0;
@@ -670,8 +725,10 @@ def get_image_base64(image_path):
         return base64.b64encode(f.read()).decode()
 
 def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, image_base64=None):
-    """Return HTML for UX-optimized insight card with flexbox layout."""
+    """Return HTML for UX-optimized insight card with flexbox layout + full metrics."""
     rating_value = f"{metric1_val:.1f}"
+    metric1_display = f"{metric1_val:.2f}"
+    metric2_display = f"{metric2_val:.2f}"
     stars = min(5, max(1, int((metric1_val / 10) * 5)))
     star_display = "★" * stars + "☆" * (5 - stars)
 
@@ -681,7 +738,7 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
     else:
         image_html = '<div style="background: #2D2D4D;"></div>'
 
-    # Clean, simple HTML for proper flexbox rendering
+    # Card HTML with all metrics displayed
     card_html = (
         '<div class="insight-card">'
         '<div class="card-image">' + image_html + '</div>'
@@ -694,10 +751,19 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
         '<span class="badge-rating-value">' + rating_value + '</span>'
         '<span class="badge-rating-stars">' + star_display + '</span>'
         '</div>'
-        '<div class="badge-duration">' + metric1_label[:3] + ': ' + f"{metric1_val:.1f}" + '</div>'
+        '</div>'
+        '<div class="card-metrics">'
+        '<div class="metric-item">'
+        '<div class="metric-label">' + metric1_label + '</div>'
+        '<div class="metric-value">' + metric1_display + '</div>'
+        '</div>'
+        '<div class="metric-item">'
+        '<div class="metric-label">' + metric2_label + '</div>'
+        '<div class="metric-value">' + metric2_display + '</div>'
         '</div>'
         '</div>'
-        '<button class="card-button">Explore</button>'
+        '</div>'
+        '<button class="card-button">Explore ' + city + '</button>'
         '</div>'
         '</div>'
     )
