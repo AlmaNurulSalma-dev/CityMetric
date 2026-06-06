@@ -474,9 +474,143 @@ p, li, td, th {{
 }}
 
 /* ── Responsive adjustments ── */
+@media (max-width: 1200px) {{
+    .insight-card {{
+        width: 260px;
+        margin: 10px;
+    }}
+    .card-image {{
+        height: 150px;
+    }}
+    .card-title {{
+        font-size: 16px;
+    }}
+}}
+
+@media (max-width: 1024px) {{
+    .insight-card {{
+        width: 240px;
+        margin: 8px;
+    }}
+    .card-image {{
+        height: 140px;
+    }}
+    .card-content {{
+        padding: 16px;
+    }}
+    .card-title {{
+        font-size: 15px;
+    }}
+    .card-subtitle {{
+        font-size: 11px;
+    }}
+}}
+
 @media (max-width: 768px) {{
     h1 {{ font-size: 1.4rem !important; }}
     .block-container {{ padding: 1rem !important; }}
+
+    .insight-card {{
+        width: 100%;
+        max-width: 320px;
+        margin: 8px auto;
+    }}
+    .card-image {{
+        height: 180px;
+    }}
+    .card-title {{
+        font-size: 16px;
+    }}
+    .card-subtitle {{
+        font-size: 12px;
+    }}
+    .card-button {{
+        padding: 12px 0;
+        font-size: 13px;
+    }}
+}}
+
+@media (max-width: 640px) {{
+    .insight-card {{
+        width: 100%;
+        max-width: 100%;
+        margin: 8px 0;
+        border-radius: 12px;
+    }}
+    .card-image {{
+        height: 160px;
+    }}
+    .card-content {{
+        padding: 16px;
+    }}
+    .card-title {{
+        font-size: 15px;
+        font-weight: 700;
+    }}
+    .card-subtitle {{
+        font-size: 11px;
+    }}
+    .card-badges {{
+        gap: 6px;
+        margin: 12px 0 10px 0;
+    }}
+    .badge-rating {{
+        padding: 4px 9px;
+        font-size: 10px;
+    }}
+    .badge-duration {{
+        padding: 4px 8px;
+        font-size: 9px;
+    }}
+    .card-button {{
+        padding: 10px 0;
+        font-size: 12px;
+        margin-top: 6px;
+    }}
+}}
+
+@media (max-width: 480px) {{
+    .insight-card {{
+        margin: 6px 0;
+        border-radius: 12px;
+    }}
+    .card-image {{
+        height: 140px;
+    }}
+    .card-content {{
+        padding: 14px;
+    }}
+    .card-title {{
+        font-size: 14px;
+        line-height: 1.2;
+    }}
+    .card-subtitle {{
+        font-size: 10px;
+        margin-top: 4px;
+    }}
+    .card-badges {{
+        gap: 5px;
+        margin: 10px 0 8px 0;
+    }}
+    .badge-rating {{
+        padding: 3px 8px;
+        font-size: 9px;
+    }}
+    .badge-rating-value {{
+        font-size: 9px;
+    }}
+    .badge-rating-stars {{
+        font-size: 9px;
+    }}
+    .badge-duration {{
+        padding: 3px 7px;
+        font-size: 8px;
+    }}
+    .card-button {{
+        padding: 9px 0;
+        font-size: 11px;
+        border-radius: 10px;
+    }}
 }}
 </style>
 """, unsafe_allow_html=True)
@@ -535,14 +669,17 @@ def get_image_base64(image_path):
     with open(image_path, 'rb') as f:
         return base64.b64encode(f.read()).decode()
 
-def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, image_path=None):
+def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, image_base64=None):
     """Return HTML for UX-optimized insight card with flexbox layout."""
     rating_value = f"{metric1_val:.1f}"
     stars = min(5, max(1, int((metric1_val / 10) * 5)))
     star_display = "★" * stars + "☆" * (5 - stars)
 
-    # Build image HTML
-    image_html = f'<img src="{image_path}" alt="{city}">' if image_path else '<div style="background: #2D2D4D;"></div>'
+    # Build image HTML using base64
+    if image_base64:
+        image_html = f'<img src="data:image/jpeg;base64,{image_base64}" alt="{city}">'
+    else:
+        image_html = '<div style="background: #2D2D4D;"></div>'
 
     # Clean, simple HTML for proper flexbox rendering
     card_html = (
@@ -569,25 +706,30 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
 
 def render_insight_card(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val):
     """Render insight card - luxury booking style with image."""
-    # Try to load city image using relative path
+    # Try to load city image using base64 encoding
     city_lower = city.lower().replace(" ", "_")
     img_path = ASSETS / "cities" / "insights" / f"{city_lower}.jpg"
 
-    # Use relative path string for Streamlit compatibility
-    img_rel_path = f"assets/cities/insights/{city_lower}.jpg" if img_path.exists() else None
+    # Convert to base64 if exists, else use empty placeholder
+    img_base64 = None
+    if img_path.exists():
+        try:
+            img_base64 = get_image_base64(str(img_path))
+        except:
+            img_base64 = None
 
     # Return dict with data for rendering in Streamlit
     return {
         "city": city,
         "country": country,
-        "img_path": img_rel_path,
+        "img_base64": img_base64,
         "cluster_color": cluster_color,
         "cluster_dark": cluster_dark,
         "metric1_label": metric1_label,
         "metric1_val": metric1_val,
         "metric2_label": metric2_label,
         "metric2_val": metric2_val,
-        "html": render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, img_rel_path)
+        "html": render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, img_base64)
     }
 
 def chart_defaults():
