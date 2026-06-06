@@ -931,7 +931,7 @@ elif page == "Cluster Analysis":
                 radialaxis=dict(range=[0,10], tickfont_size=7,
                                 gridcolor=GRID_COL, linecolor=BORDER_COL,
                                 tickfont=dict(color=TEXT_MAIN)),
-                angularaxis=dict(tickfont=dict(size=6.5, color=TEXT_MAIN),
+                angularaxis=dict(tickfont=dict(size=5.5, color=TEXT_MAIN),
                                 rotation=0),
                 bgcolor="rgba(0,0,0,0)",
             )
