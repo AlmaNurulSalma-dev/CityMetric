@@ -470,15 +470,18 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
 
 def render_insight_card(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val):
     """Render insight card - uses Streamlit components for better compatibility."""
-    # Try to load city image
+    # Try to load city image using relative path
     city_lower = city.lower().replace(" ", "_")
     img_path = ASSETS / "cities" / "insights" / f"{city_lower}.jpg"
+
+    # Use relative path string for Streamlit compatibility
+    img_rel_path = f"assets/cities/insights/{city_lower}.jpg" if img_path.exists() else None
 
     # Return dict with data for rendering in Streamlit
     return {
         "city": city,
         "country": country,
-        "img_path": img_path if img_path.exists() else None,
+        "img_path": img_rel_path,
         "cluster_color": cluster_color,
         "cluster_dark": cluster_dark,
         "metric1_label": metric1_label,
@@ -1207,7 +1210,7 @@ elif page == "Insights":
             )
             # Display image if available
             if card_data["img_path"]:
-                st.image(str(card_data["img_path"]), use_column_width=True)
+                st.image(card_data["img_path"], width=None)
             st.markdown(card_data["html"], unsafe_allow_html=True)
 
     with col2:
@@ -1225,7 +1228,7 @@ elif page == "Insights":
             )
             # Display image if available
             if card_data["img_path"]:
-                st.image(str(card_data["img_path"]), use_column_width=True)
+                st.image(card_data["img_path"], width=None)
             st.markdown(card_data["html"], unsafe_allow_html=True)
 
     with col3:
@@ -1243,7 +1246,7 @@ elif page == "Insights":
             )
             # Display image if available
             if card_data["img_path"]:
-                st.image(str(card_data["img_path"]), use_column_width=True)
+                st.image(card_data["img_path"], width=None)
             st.markdown(card_data["html"], unsafe_allow_html=True)
 
     divider()
