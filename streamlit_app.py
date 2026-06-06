@@ -493,10 +493,13 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
     stars = min(5, max(1, int((metric1_val / 10) * 5)))
     star_display = "★" * stars + "☆" * (5 - stars)
 
+    # Build image HTML separately to avoid nested f-string issues
+    image_html = f'<img src="{image_path}" alt="{city}">' if image_path else '<div style="width: 100%; height: 100%; background: #2D2D4D;"></div>'
+
     card_html = f'''
     <div class="insight-card">
         <div class="card-image">
-            {f'<img src="{image_path}" alt="{city}">' if image_path else '<div style="width: 100%; height: 100%; background: #2D2D4D;"></div>'}
+            {image_html}
             <div class="image-overlay"></div>
         </div>
 
