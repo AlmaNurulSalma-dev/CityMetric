@@ -350,10 +350,9 @@ p, li, td, th {{
 /* ── Insight Cards Grid Layout ── */
 .insights-grid {{
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     margin-bottom: 24px;
-    max-width: 500px;
 }}
 
 /* ── Insight Cards (Ranked Single Column Design) ── */
@@ -561,128 +560,18 @@ p, li, td, th {{
 /* ── Responsive adjustments ── */
 @media (max-width: 1400px) {{
     .insights-grid {{
-        max-width: 480px;
-    }}
-    .card-image {{
-        height: 180px;
-    }}
-}}
-
-@media (max-width: 1200px) {{
-    .insights-grid {{
-        max-width: 450px;
-    }}
-    .card-image {{
-        height: 170px;
-    }}
-    .card-content {{
-        padding: 16px;
-    }}
-    .card-title {{
-        font-size: 16px;
-    }}
-}}
-
-@media (max-width: 1024px) {{
-    .insights-grid {{
-        max-width: 420px;
+        grid-template-columns: repeat(3, 1fr);
         gap: 14px;
     }}
     .card-image {{
         height: 160px;
     }}
-    .card-content {{
-        padding: 14px;
-    }}
-    .card-title {{
-        font-size: 15px;
-    }}
-    .card-subtitle {{
-        font-size: 11px;
-    }}
 }}
 
-@media (max-width: 768px) {{
-    h1 {{ font-size: 1.4rem !important; }}
-    .block-container {{ padding: 1rem !important; }}
-
+@media (max-width: 1200px) {{
     .insights-grid {{
-        grid-template-columns: 1fr;
-        gap: 16px;
-        margin-bottom: 24px;
-    }}
-    .card-image {{
-        height: 180px;
-    }}
-    .card-title {{
-        font-size: 16px;
-    }}
-    .card-subtitle {{
-        font-size: 12px;
-    }}
-    .card-metrics {{
-        gap: 8px;
-        margin-top: 6px;
-        padding-top: 8px;
-    }}
-    .metric-label {{
-        font-size: 9px;
-    }}
-    .metric-value {{
-        font-size: 13px;
-    }}
-}}
-
-@media (max-width: 640px) {{
-    .insight-card {{
-        width: 100%;
-        max-width: 100%;
-        margin: 8px 0;
-        border-radius: 12px;
-    }}
-    .card-image {{
-        height: 160px;
-    }}
-    .card-content {{
-        padding: 16px;
-    }}
-    .card-title {{
-        font-size: 15px;
-        font-weight: 700;
-    }}
-    .card-subtitle {{
-        font-size: 11px;
-    }}
-    .card-badges {{
-        gap: 6px;
-        margin: 12px 0 10px 0;
-    }}
-    .badge-rating {{
-        padding: 4px 9px;
-        font-size: 10px;
-    }}
-    .card-metrics {{
-        gap: 8px;
-        margin-top: 8px;
-        padding-top: 8px;
-    }}
-    .metric-label {{
-        font-size: 9px;
-    }}
-    .metric-value {{
-        font-size: 12px;
-    }}
-    .card-button {{
-        padding: 10px 0;
-        font-size: 12px;
-        margin-top: 6px;
-    }}
-}}
-
-@media (max-width: 480px) {{
-    .insight-card {{
-        margin: 6px 0;
-        border-radius: 12px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
     }}
     .card-image {{
         height: 140px;
@@ -692,24 +581,96 @@ p, li, td, th {{
     }}
     .card-title {{
         font-size: 14px;
-        line-height: 1.2;
+    }}
+    .card-subtitle {{
+        font-size: 11px;
+    }}
+}}
+
+@media (max-width: 1024px) {{
+    .insights-grid {{
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }}
+    .card-image {{
+        height: 130px;
+    }}
+    .card-content {{
+        padding: 12px;
+    }}
+    .card-title {{
+        font-size: 13px;
     }}
     .card-subtitle {{
         font-size: 10px;
-        margin-top: 4px;
+    }}
+    .card-metrics {{
+        gap: 6px;
+    }}
+}}
+
+@media (max-width: 768px) {{
+    h1 {{ font-size: 1.4rem !important; }}
+    .block-container {{ padding: 1rem !important; }}
+
+    .insights-grid {{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+    }}
+    .card-image {{
+        height: 140px;
+    }}
+    .card-content {{
+        padding: 12px;
+    }}
+    .card-title {{
+        font-size: 13px;
+    }}
+    .card-subtitle {{
+        font-size: 11px;
+    }}
+    .card-metrics {{
+        gap: 6px;
+        margin-top: 6px;
+        padding-top: 6px;
+    }}
+    .metric-label {{
+        font-size: 8px;
+    }}
+    .metric-value {{
+        font-size: 11px;
+    }}
+    .rank-badge {{
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }}
+}}
+
+@media (max-width: 640px) {{
+    .insights-grid {{
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }}
+    .card-image {{
+        height: 150px;
+    }}
+    .card-content {{
+        padding: 12px;
+    }}
+    .card-title {{
+        font-size: 14px;
+    }}
+    .card-subtitle {{
+        font-size: 10px;
     }}
     .card-badges {{
-        gap: 5px;
+        gap: 6px;
         margin: 10px 0 8px 0;
     }}
     .badge-rating {{
-        padding: 3px 8px;
-        font-size: 9px;
-    }}
-    .badge-rating-value {{
-        font-size: 9px;
-    }}
-    .badge-rating-stars {{
+        padding: 4px 8px;
         font-size: 9px;
     }}
     .card-metrics {{
@@ -723,10 +684,64 @@ p, li, td, th {{
     .metric-value {{
         font-size: 11px;
     }}
-    .card-button {{
-        padding: 9px 0;
-        font-size: 11px;
-        border-radius: 10px;
+    .rank-badge {{
+        width: 34px;
+        height: 34px;
+        font-size: 14px;
+    }}
+}}
+
+@media (max-width: 480px) {{
+    .insights-grid {{
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }}
+    .card-image {{
+        height: 130px;
+    }}
+    .card-content {{
+        padding: 11px;
+    }}
+    .card-title {{
+        font-size: 13px;
+        line-height: 1.2;
+    }}
+    .card-subtitle {{
+        font-size: 9px;
+        margin-top: 3px;
+    }}
+    .card-badges {{
+        gap: 4px;
+        margin: 8px 0 6px 0;
+    }}
+    .badge-rating {{
+        padding: 3px 7px;
+        font-size: 8px;
+    }}
+    .badge-rating-value {{
+        font-size: 8px;
+    }}
+    .badge-rating-stars {{
+        font-size: 8px;
+        letter-spacing: 1px;
+    }}
+    .card-metrics {{
+        gap: 5px;
+        margin-top: 5px;
+        padding-top: 5px;
+    }}
+    .metric-label {{
+        font-size: 7px;
+    }}
+    .metric-value {{
+        font-size: 10px;
+    }}
+    .rank-badge {{
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+        top: 8px;
+        right: 8px;
     }}
 }}
 </style>
