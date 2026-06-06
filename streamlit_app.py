@@ -409,6 +409,63 @@ def get_image_base64(image_path):
     with open(image_path, 'rb') as f:
         return base64.b64encode(f.read()).decode()
 
+def render_insight_card(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val):
+    """Render modern luxury-style insight card."""
+    return f'''
+    <div style="
+        background: linear-gradient(135deg, {cluster_dark}15 0%, {cluster_dark}05 100%);
+        border: 1px solid {cluster_color}40;
+        border-left: 4px solid {cluster_color};
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+        font-family: 'Inter', sans-serif;
+    ">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+            <div>
+                <div style="
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: {TEXT_MAIN};
+                    margin-bottom: 2px;
+                ">{city}</div>
+                <div style="
+                    font-size: 12px;
+                    color: {TEXT_MUTED};
+                    font-weight: 500;
+                ">{country}</div>
+            </div>
+            <div style="
+                background: {cluster_color};
+                color: {TEXT_MAIN};
+                padding: 4px 10px;
+                border-radius: 20px;
+                font-size: 11px;
+                font-weight: 700;
+                white-space: nowrap;
+            ">★ {metric1_val:.2f}</div>
+        </div>
+        <div style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid {cluster_color}30;
+        ">
+            <div style="font-size: 11px;">
+                <span style="color: {TEXT_MUTED}; font-weight: 600;">{metric1_label}</span><br/>
+                <span style="color: {TEXT_MAIN}; font-weight: 700; font-size: 13px;">{metric1_val:.2f}</span>
+            </div>
+            <div style="font-size: 11px;">
+                <span style="color: {TEXT_MUTED}; font-weight: 600;">{metric2_label}</span><br/>
+                <span style="color: {TEXT_MAIN}; font-weight: 700; font-size: 13px;">{metric2_val:.2f}</span>
+            </div>
+        </div>
+    </div>
+    '''
+
 def chart_defaults():
     return dict(
         paper_bgcolor="rgba(0,0,0,0)",
@@ -1013,7 +1070,7 @@ elif page == "Dimension Deep-Dive":
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "City Comparison":
     st.title("City Comparison")
-    st.caption("Select 2–6 cities to compare across all dimensions.")
+    st.caption("Select 2–8 cities to compare across all dimensions.")
     divider()
 
     default_cities = ["Shanghai","Jakarta","Nanjing","Singapore","Lisbon","Seoul","Tokyo","New York"]
@@ -1021,7 +1078,7 @@ elif page == "City Comparison":
         "Choose cities",
         options=sorted(df_all["city"].unique()),
         default=[c for c in default_cities if c in df_all["city"].values],
-        max_selections=6,
+        max_selections=8,
     )
 
     if len(cities_to_compare) < 2:
@@ -1123,12 +1180,11 @@ elif page == "Insights":
             c = CLUSTER_COLORS[r["cluster"]]
             d = CLUSTER_DARK[r["cluster"]]
             st.markdown(
-                f'<div class="insight-card" style="background:{c}22;border-color:{d}">'
-                f'<div style="font-weight:700;color:{TEXT_MAIN};font-family:Plus Jakarta Sans,sans-serif">'
-                f'{r["city"]}</div>'
-                f'<div style="font-size:11px;color:{TEXT_MUTED};font-family:Inter,sans-serif;margin-top:2px">'
-                f'{r["country"]} · Score {r["opportunity_index"]:.2f} · '
-                f'Afford {r["affordability_score"]:.2f}</div></div>',
+                render_insight_card(
+                    r["city"], r["country"], c, d,
+                    "Opportunity", r["opportunity_index"],
+                    "Affordability", r["affordability_score"]
+                ),
                 unsafe_allow_html=True,
             )
 
@@ -1141,12 +1197,11 @@ elif page == "Insights":
             c = CLUSTER_COLORS[r["cluster"]]
             d = CLUSTER_DARK[r["cluster"]]
             st.markdown(
-                f'<div class="insight-card" style="background:{c}22;border-color:{d}">'
-                f'<div style="font-weight:700;color:{TEXT_MAIN};font-family:Plus Jakarta Sans,sans-serif">'
-                f'{r["city"]}</div>'
-                f'<div style="font-size:11px;color:{TEXT_MUTED};font-family:Inter,sans-serif;margin-top:2px">'
-                f'{r["country"]} · Growth {r["growth_score"]:.2f} · '
-                f'Opp {r["opportunity_index"]:.2f}</div></div>',
+                render_insight_card(
+                    r["city"], r["country"], c, d,
+                    "Growth", r["growth_score"],
+                    "Opportunity", r["opportunity_index"]
+                ),
                 unsafe_allow_html=True,
             )
 
@@ -1159,12 +1214,11 @@ elif page == "Insights":
             c = CLUSTER_COLORS[r["cluster"]]
             d = CLUSTER_DARK[r["cluster"]]
             st.markdown(
-                f'<div class="insight-card" style="background:{c}22;border-color:{d}">'
-                f'<div style="font-weight:700;color:{TEXT_MAIN};font-family:Plus Jakarta Sans,sans-serif">'
-                f'{r["city"]}</div>'
-                f'<div style="font-size:11px;color:{TEXT_MUTED};font-family:Inter,sans-serif;margin-top:2px">'
-                f'{r["country"]} · Innov {r["innovation_score"]:.2f} · '
-                f'Talent {r["talent_score"]:.2f}</div></div>',
+                render_insight_card(
+                    r["city"], r["country"], c, d,
+                    "Innovation", r["innovation_score"],
+                    "Talent", r["talent_score"]
+                ),
                 unsafe_allow_html=True,
             )
 
