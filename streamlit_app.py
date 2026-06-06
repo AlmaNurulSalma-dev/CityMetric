@@ -409,67 +409,191 @@ def get_image_base64(image_path):
     with open(image_path, 'rb') as f:
         return base64.b64encode(f.read()).decode()
 
-def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val):
-    """Return HTML for luxury insight card with fallback."""
-    # Fallback: Solid color card (Streamlit markdown can't display background images)
+def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, image_path=None):
+    """Return HTML for luxury booking-style insight card - matches reference design exactly."""
+    rating_value = f"{metric1_val:.1f}"
+
+    # Generate star rating based on metric value (0-10 scale to 1-5 stars)
+    stars = min(5, max(1, int((metric1_val / 10) * 5)))
+    star_display = "★" * stars + "☆" * (5 - stars)
+
     card_html = f'''
-    <div style="
-        background: linear-gradient(135deg, {cluster_dark}15 0%, {cluster_dark}05 100%);
-        border: 1px solid {cluster_color}40;
-        border-left: 4px solid {cluster_color};
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 12px;
-        transition: all 0.3s ease;
-        font-family: 'Inter', sans-serif;
-    ">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-            <div>
-                <div style="
-                    font-family: 'Plus Jakarta Sans', sans-serif;
-                    font-size: 16px;
-                    font-weight: 700;
-                    color: {TEXT_MAIN};
-                    margin-bottom: 2px;
-                ">{city}</div>
-                <div style="
-                    font-size: 12px;
-                    color: {TEXT_MUTED};
-                    font-weight: 500;
-                ">{country}</div>
-            </div>
-            <div style="
-                background: #FFD700;
-                color: #000000;
-                padding: 4px 10px;
-                border-radius: 20px;
-                font-size: 11px;
-                font-weight: 700;
-                white-space: nowrap;
-            ">★ {metric1_val:.2f}</div>
-        </div>
-        <div style="
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+    <style>
+        .insight-card {{
+            width: 280px;
+            height: 380px;
+            background: #1A1A2E;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            display: inline-block;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+        }}
+
+        .insight-card:hover {{
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+        }}
+
+        .card-image {{
+            width: 100%;
+            height: 55%;
+            position: relative;
+            display: block;
+            background: linear-gradient(135deg, {cluster_dark} 0%, {cluster_color}40 100%);
+        }}
+
+        .card-image img {{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }}
+
+        .image-overlay {{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, 0.3) 40%,
+                rgba(0, 0, 0, 0.7) 100%);
+            z-index: 1;
+        }}
+
+        .card-content {{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 45%;
+            background: linear-gradient(to bottom,
+                rgba(26, 26, 46, 0) 0%,
+                rgba(26, 26, 46, 0.8) 30%,
+                rgba(26, 26, 46, 1) 100%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 2;
+        }}
+
+        .card-title {{
+            font-size: 18px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin: 0;
+            line-height: 1.2;
+            letter-spacing: 0.5px;
+        }}
+
+        .card-subtitle {{
+            font-size: 13px;
+            color: #E0E0E0;
+            margin: 6px 0 0 0;
+            line-height: 1.3;
+        }}
+
+        .card-badges {{
+            display: flex;
             gap: 10px;
-            padding-top: 10px;
-            border-top: 1px solid {cluster_color}30;
-        ">
-            <div style="font-size: 11px;">
-                <span style="color: {TEXT_MUTED}; font-weight: 600;">{metric1_label}</span><br/>
-                <span style="color: {TEXT_MAIN}; font-weight: 700; font-size: 13px;">{metric1_val:.2f}</span>
+            margin: 12px 0 0 0;
+            align-items: center;
+            flex-wrap: wrap;
+        }}
+
+        .badge-rating {{
+            display: inline-flex;
+            background: #FFD700;
+            color: #1A1A2E;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            align-items: center;
+            gap: 4px;
+            width: fit-content;
+        }}
+
+        .badge-rating-value {{
+            font-size: 12px;
+            font-weight: 700;
+        }}
+
+        .badge-rating-stars {{
+            font-size: 11px;
+            letter-spacing: 2px;
+        }}
+
+        .badge-duration {{
+            display: inline-flex;
+            background: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            border: 1px solid #FFD700;
+            font-weight: 500;
+            width: fit-content;
+        }}
+
+        .card-button {{
+            width: 100%;
+            padding: 12px 0;
+            background: #FFFFFF;
+            color: #1A1A2E;
+            border: none;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: none;
+            margin-top: auto;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }}
+
+        .card-button:hover {{
+            background: #F0F0F0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }}
+    </style>
+
+    <div class="insight-card">
+        <div class="card-image">
+            {f'<img src="{image_path}" alt="{city}">' if image_path else '<div style="width: 100%; height: 100%; background: linear-gradient(135deg, {cluster_dark} 0%, {cluster_color}40 100%);"></div>'}
+            <div class="image-overlay"></div>
+        </div>
+
+        <div class="card-content">
+            <div>
+                <div class="card-title">{city}</div>
+                <div class="card-subtitle">{country}</div>
+
+                <div class="card-badges">
+                    <div class="badge-rating">
+                        <span class="badge-rating-value">{rating_value}</span>
+                        <span class="badge-rating-stars">{star_display}</span>
+                    </div>
+                    <div class="badge-duration">{metric1_label}: {metric1_val:.1f}</div>
+                </div>
             </div>
-            <div style="font-size: 11px;">
-                <span style="color: {TEXT_MUTED}; font-weight: 600;">{metric2_label}</span><br/>
-                <span style="color: {TEXT_MAIN}; font-weight: 700; font-size: 13px;">{metric2_val:.2f}</span>
-            </div>
+
+            <button class="card-button">Explore {city}</button>
         </div>
     </div>
     '''
     return card_html
 
 def render_insight_card(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val):
-    """Render insight card - uses Streamlit components for better compatibility."""
+    """Render insight card - luxury booking style with image."""
     # Try to load city image using relative path
     city_lower = city.lower().replace(" ", "_")
     img_path = ASSETS / "cities" / "insights" / f"{city_lower}.jpg"
@@ -488,7 +612,7 @@ def render_insight_card(city, country, cluster_color, cluster_dark, metric1_labe
         "metric1_val": metric1_val,
         "metric2_label": metric2_label,
         "metric2_val": metric2_val,
-        "html": render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val)
+        "html": render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, img_rel_path)
     }
 
 def chart_defaults():
@@ -1208,9 +1332,7 @@ elif page == "Insights":
                 "Opportunity", r["opportunity_index"],
                 "Affordability", r["affordability_score"]
             )
-            # Display image if available
-            if card_data["img_path"]:
-                st.image(card_data["img_path"])
+            # Display luxury booking card with image embedded
             st.markdown(card_data["html"], unsafe_allow_html=True)
 
     with col2:
@@ -1226,9 +1348,7 @@ elif page == "Insights":
                 "Growth", r["growth_score"],
                 "Opportunity", r["opportunity_index"]
             )
-            # Display image if available
-            if card_data["img_path"]:
-                st.image(card_data["img_path"])
+            # Display luxury booking card with image embedded
             st.markdown(card_data["html"], unsafe_allow_html=True)
 
     with col3:
@@ -1244,9 +1364,7 @@ elif page == "Insights":
                 "Innovation", r["innovation_score"],
                 "Talent", r["talent_score"]
             )
-            # Display image if available
-            if card_data["img_path"]:
-                st.image(card_data["img_path"])
+            # Display luxury booking card with image embedded
             st.markdown(card_data["html"], unsafe_allow_html=True)
 
     divider()
