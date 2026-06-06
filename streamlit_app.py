@@ -347,6 +347,84 @@ p, li, td, th {{
 ::-webkit-scrollbar-thumb {{ background: {BORDER_COL}; border-radius: 3px; }}
 ::-webkit-scrollbar-thumb:hover {{ background: {PRIMARY}; }}
 
+/* ── Insight Cards (Luxury Booking Style) ── */
+.insight-card {{
+    width: 280px;
+    height: 380px;
+    background: #1A1A2E;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    display: inline-block;
+    transition: all 0.3s ease;
+    margin-bottom: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}}
+.insight-card:hover {{
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}}
+.card-image {{
+    width: 100%; height: 55%; position: relative;
+    display: block; background: linear-gradient(135deg, #2D2D4D 0%, #1A1A2E 100%);
+}}
+.card-image img {{
+    width: 100%; height: 100%; object-fit: cover;
+    object-position: center; display: block;
+}}
+.image-overlay {{
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 40%, rgba(0, 0, 0, 0.7) 100%);
+    z-index: 1;
+}}
+.card-content {{
+    position: absolute; bottom: 0; left: 0; right: 0; height: 45%;
+    background: linear-gradient(to bottom,
+        rgba(26, 26, 46, 0) 0%, rgba(26, 26, 46, 0.8) 30%, rgba(26, 26, 46, 1) 100%);
+    padding: 20px; display: flex; flex-direction: column;
+    justify-content: space-between; z-index: 2;
+}}
+.card-title {{
+    font-size: 18px; font-weight: 600; color: #FFFFFF;
+    margin: 0; line-height: 1.2; letter-spacing: 0.5px;
+}}
+.card-subtitle {{
+    font-size: 13px; color: #E0E0E0; margin: 6px 0 0 0; line-height: 1.3;
+}}
+.card-badges {{
+    display: flex; gap: 10px; margin: 12px 0 0 0;
+    align-items: center; flex-wrap: wrap;
+}}
+.badge-rating {{
+    display: inline-flex; background: #FFD700; color: #1A1A2E;
+    padding: 6px 12px; border-radius: 20px; font-size: 12px;
+    font-weight: 600; align-items: center; gap: 4px; width: fit-content;
+}}
+.badge-rating-value {{
+    font-size: 12px; font-weight: 700;
+}}
+.badge-rating-stars {{
+    font-size: 11px; letter-spacing: 2px;
+}}
+.badge-duration {{
+    display: inline-flex; background: rgba(255, 215, 0, 0.2);
+    color: #FFD700; padding: 6px 12px; border-radius: 20px;
+    font-size: 11px; border: 1px solid #FFD700; font-weight: 500; width: fit-content;
+}}
+.card-button {{
+    width: 100%; padding: 12px 0; background: #FFFFFF;
+    color: #1A1A2E; border: none; border-radius: 16px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: all 0.3s ease; box-shadow: none; margin-top: auto;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}}
+.card-button:hover {{
+    background: #F0F0F0; transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}}
+
 /* ── Responsive adjustments ── */
 @media (max-width: 768px) {{
     h1 {{ font-size: 1.4rem !important; }}
@@ -410,162 +488,12 @@ def get_image_base64(image_path):
         return base64.b64encode(f.read()).decode()
 
 def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, image_path=None):
-    """Return HTML for luxury booking-style insight card - matches reference design exactly."""
+    """Return HTML for luxury booking-style insight card."""
     rating_value = f"{metric1_val:.1f}"
-
-    # Generate star rating based on metric value (0-10 scale to 1-5 stars)
     stars = min(5, max(1, int((metric1_val / 10) * 5)))
     star_display = "★" * stars + "☆" * (5 - stars)
 
     card_html = f'''
-    <style>
-        .insight-card {{
-            width: 280px;
-            height: 380px;
-            background: #1A1A2E;
-            border-radius: 24px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-            display: inline-block;
-            transition: all 0.3s ease;
-            margin-bottom: 16px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-        }}
-
-        .insight-card:hover {{
-            transform: translateY(-8px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-        }}
-
-        .card-image {{
-            width: 100%;
-            height: 55%;
-            position: relative;
-            display: block;
-            background: linear-gradient(135deg, #2D2D4D 0%, #1A1A2E 100%);
-        }}
-
-        .card-image img {{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            display: block;
-        }}
-
-        .image-overlay {{
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom,
-                rgba(0, 0, 0, 0) 0%,
-                rgba(0, 0, 0, 0.3) 40%,
-                rgba(0, 0, 0, 0.7) 100%);
-            z-index: 1;
-        }}
-
-        .card-content {{
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 45%;
-            background: linear-gradient(to bottom,
-                rgba(26, 26, 46, 0) 0%,
-                rgba(26, 26, 46, 0.8) 30%,
-                rgba(26, 26, 46, 1) 100%);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            z-index: 2;
-        }}
-
-        .card-title {{
-            font-size: 18px;
-            font-weight: 600;
-            color: #FFFFFF;
-            margin: 0;
-            line-height: 1.2;
-            letter-spacing: 0.5px;
-        }}
-
-        .card-subtitle {{
-            font-size: 13px;
-            color: #E0E0E0;
-            margin: 6px 0 0 0;
-            line-height: 1.3;
-        }}
-
-        .card-badges {{
-            display: flex;
-            gap: 10px;
-            margin: 12px 0 0 0;
-            align-items: center;
-            flex-wrap: wrap;
-        }}
-
-        .badge-rating {{
-            display: inline-flex;
-            background: #FFD700;
-            color: #1A1A2E;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            align-items: center;
-            gap: 4px;
-            width: fit-content;
-        }}
-
-        .badge-rating-value {{
-            font-size: 12px;
-            font-weight: 700;
-        }}
-
-        .badge-rating-stars {{
-            font-size: 11px;
-            letter-spacing: 2px;
-        }}
-
-        .badge-duration {{
-            display: inline-flex;
-            background: rgba(255, 215, 0, 0.2);
-            color: #FFD700;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            border: 1px solid #FFD700;
-            font-weight: 500;
-            width: fit-content;
-        }}
-
-        .card-button {{
-            width: 100%;
-            padding: 12px 0;
-            background: #FFFFFF;
-            color: #1A1A2E;
-            border: none;
-            border-radius: 16px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: none;
-            margin-top: auto;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }}
-
-        .card-button:hover {{
-            background: #F0F0F0;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }}
-    </style>
-
     <div class="insight-card">
         <div class="card-image">
             {f'<img src="{image_path}" alt="{city}">' if image_path else '<div style="width: 100%; height: 100%; background: #2D2D4D;"></div>'}
