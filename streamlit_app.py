@@ -1210,7 +1210,7 @@ elif page == "Insights":
             )
             # Display image if available
             if card_data["img_path"]:
-                st.image(card_data["img_path"], width=None)
+                st.image(card_data["img_path"])
             st.markdown(card_data["html"], unsafe_allow_html=True)
 
     with col2:
@@ -1228,7 +1228,7 @@ elif page == "Insights":
             )
             # Display image if available
             if card_data["img_path"]:
-                st.image(card_data["img_path"], width=None)
+                st.image(card_data["img_path"])
             st.markdown(card_data["html"], unsafe_allow_html=True)
 
     with col3:
@@ -1246,7 +1246,7 @@ elif page == "Insights":
             )
             # Display image if available
             if card_data["img_path"]:
-                st.image(card_data["img_path"], width=None)
+                st.image(card_data["img_path"])
             st.markdown(card_data["html"], unsafe_allow_html=True)
 
     divider()
