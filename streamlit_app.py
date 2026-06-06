@@ -568,7 +568,7 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
 
     <div class="insight-card">
         <div class="card-image">
-            {f'<img src="{image_path}" alt="{city}">' if image_path else '<div style="width: 100%; height: 100%; background: linear-gradient(135deg, {cluster_dark} 0%, {cluster_color}40 100%);"></div>'}
+            {f'<img src="{image_path}" alt="{city}">' if image_path else '<div style="width: 100%; height: 100%; background: #2D2D4D;"></div>'}
             <div class="image-overlay"></div>
         </div>
 
