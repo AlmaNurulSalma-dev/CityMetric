@@ -1207,15 +1207,10 @@ elif page == "Insights":
                 "Opportunity", r["opportunity_index"],
                 "Affordability", r["affordability_score"]
             )
-            # Display image if available, otherwise just show card
+            # Display image if available
             if card_data["img_path"]:
-                img_col, text_col = st.columns([1, 2])
-                with img_col:
-                    st.image(str(card_data["img_path"]), use_column_width=True)
-                with text_col:
-                    st.markdown(card_data["html"], unsafe_allow_html=True)
-            else:
-                st.markdown(card_data["html"], unsafe_allow_html=True)
+                st.image(str(card_data["img_path"]), use_column_width=True)
+            st.markdown(card_data["html"], unsafe_allow_html=True)
 
     with col2:
         section_label("Growth")
@@ -1230,15 +1225,10 @@ elif page == "Insights":
                 "Growth", r["growth_score"],
                 "Opportunity", r["opportunity_index"]
             )
-            # Display image if available, otherwise just show card
+            # Display image if available
             if card_data["img_path"]:
-                img_col, text_col = st.columns([1, 2])
-                with img_col:
-                    st.image(str(card_data["img_path"]), use_column_width=True)
-                with text_col:
-                    st.markdown(card_data["html"], unsafe_allow_html=True)
-            else:
-                st.markdown(card_data["html"], unsafe_allow_html=True)
+                st.image(str(card_data["img_path"]), use_column_width=True)
+            st.markdown(card_data["html"], unsafe_allow_html=True)
 
     with col3:
         section_label("Innovation")
@@ -1253,15 +1243,10 @@ elif page == "Insights":
                 "Innovation", r["innovation_score"],
                 "Talent", r["talent_score"]
             )
-            # Display image if available, otherwise just show card
+            # Display image if available
             if card_data["img_path"]:
-                img_col, text_col = st.columns([1, 2])
-                with img_col:
-                    st.image(str(card_data["img_path"]), use_column_width=True)
-                with text_col:
-                    st.markdown(card_data["html"], unsafe_allow_html=True)
-            else:
-                st.markdown(card_data["html"], unsafe_allow_html=True)
+                st.image(str(card_data["img_path"]), use_column_width=True)
+            st.markdown(card_data["html"], unsafe_allow_html=True)
 
     divider()
     section_label("Key Findings")
