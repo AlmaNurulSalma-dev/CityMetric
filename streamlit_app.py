@@ -753,31 +753,31 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
 
     # Card HTML with cluster label, trend, and all metrics (no Explore button)
     card_html = (
-        '<div class="insight-card">'
-        '<div class="card-image">' + image_html + '</div>'
-        '<div class="card-content">'
-        '<div>'
-        '<div class="card-title">' + city + '</div>'
-        '<div class="card-subtitle">' + country + '</div>'
+        '<div class="insight-card">' +
+        '<div class="card-image">' + image_html + '</div>' +
+        '<div class="card-content">' +
+        '<div>' +
+        '<div class="card-title">' + city + '</div>' +
+        '<div class="card-subtitle">' + country + '</div>' +
         cluster_trend_html +
-        '<div class="card-badges">'
-        '<div class="badge-rating">'
-        '<span class="badge-rating-value">' + rating_value + '</span>'
-        '<span class="badge-rating-stars">' + star_display + '</span>'
-        '</div>'
-        '</div>'
-        '<div class="card-metrics">'
-        '<div class="metric-item">'
-        '<div class="metric-label">' + metric1_label + '</div>'
-        '<div class="metric-value">' + metric1_display + '</div>'
-        '</div>'
-        '<div class="metric-item">'
-        '<div class="metric-label">' + metric2_label + '</div>'
-        '<div class="metric-value">' + metric2_display + '</div>'
-        '</div>'
-        '</div>'
-        '</div>'
-        '</div>'
+        '<div class="card-badges">' +
+        '<div class="badge-rating">' +
+        '<span class="badge-rating-value">' + rating_value + '</span>' +
+        '<span class="badge-rating-stars">' + star_display + '</span>' +
+        '</div>' +
+        '</div>' +
+        '<div class="card-metrics">' +
+        '<div class="metric-item">' +
+        '<div class="metric-label">' + metric1_label + '</div>' +
+        '<div class="metric-value">' + metric1_display + '</div>' +
+        '</div>' +
+        '<div class="metric-item">' +
+        '<div class="metric-label">' + metric2_label + '</div>' +
+        '<div class="metric-value">' + metric2_display + '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
         '</div>'
     )
 
