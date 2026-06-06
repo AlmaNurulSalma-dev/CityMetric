@@ -347,27 +347,33 @@ p, li, td, th {{
 ::-webkit-scrollbar-thumb {{ background: {BORDER_COL}; border-radius: 3px; }}
 ::-webkit-scrollbar-thumb:hover {{ background: {PRIMARY}; }}
 
-/* ── Insight Cards (UX-First Flexbox Design) ── */
+/* ── Insight Cards Grid Layout ── */
+.insights-grid {{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+}}
+
+/* ── Insight Cards (Premium 2-Column Design) ── */
 .insight-card {{
-    width: 280px;
+    width: 100%;
     background: #1A1A2E;
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    margin: 12px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    vertical-align: top;
 }}
 .insight-card:hover {{
-    transform: translateY(-6px);
+    transform: translateY(-8px);
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
 }}
 .card-image {{
     width: 100%;
-    height: 160px;
+    height: 200px;
     background: linear-gradient(135deg, #2D2D4D 0%, #1A1A2E 100%);
     overflow: hidden;
     flex-shrink: 0;
@@ -475,6 +481,33 @@ p, li, td, th {{
     margin-left: 4px;
 }}
 
+.view-all-link {{
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: rgba(255, 215, 0, 0.15);
+    color: #FFD700;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}}
+.view-all-link:hover {{
+    background: rgba(255, 215, 0, 0.25);
+    border-color: rgba(255, 215, 0, 0.5);
+    transform: translateX(4px);
+}}
+
+.hidden-cards {{
+    display: none;
+}}
+.hidden-cards.expanded {{
+    display: contents;
+}}
+
 .card-metrics {{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -506,13 +539,27 @@ p, li, td, th {{
 }}
 
 /* ── Responsive adjustments ── */
-@media (max-width: 1200px) {{
-    .insight-card {{
-        width: 260px;
-        margin: 10px;
+@media (max-width: 1400px) {{
+    .insights-grid {{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }}
     .card-image {{
-        height: 150px;
+        height: 190px;
+    }}
+}}
+
+@media (max-width: 1200px) {{
+    .insights-grid {{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+        margin-bottom: 28px;
+    }}
+    .card-image {{
+        height: 170px;
+    }}
+    .card-content {{
+        padding: 16px;
     }}
     .card-title {{
         font-size: 16px;
@@ -520,15 +567,15 @@ p, li, td, th {{
 }}
 
 @media (max-width: 1024px) {{
-    .insight-card {{
-        width: 240px;
-        margin: 8px;
+    .insights-grid {{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
     }}
     .card-image {{
-        height: 140px;
+        height: 150px;
     }}
     .card-content {{
-        padding: 16px;
+        padding: 14px;
     }}
     .card-title {{
         font-size: 15px;
@@ -542,10 +589,10 @@ p, li, td, th {{
     h1 {{ font-size: 1.4rem !important; }}
     .block-container {{ padding: 1rem !important; }}
 
-    .insight-card {{
-        width: 100%;
-        max-width: 320px;
-        margin: 8px auto;
+    .insights-grid {{
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
     }}
     .card-image {{
         height: 180px;
@@ -565,10 +612,6 @@ p, li, td, th {{
         font-size: 9px;
     }}
     .metric-value {{
-        font-size: 13px;
-    }}
-    .card-button {{
-        padding: 12px 0;
         font-size: 13px;
     }}
 }}
@@ -1525,58 +1568,82 @@ elif page == "Insights":
     st.caption("What the data reveals about global city opportunities.")
     divider()
 
-    col1, col2, col3 = st.columns(3, gap="medium")
+    # Helper function to render insight section with 2-column grid and View All
+    def render_insight_section(title, subtitle, caption, data_series, metric1_label, metric1_col, metric2_label, metric2_col):
+        """Render insight section with grid layout and expandable View All."""
+        section_label(title)
+        st.subheader(subtitle)
+        st.caption(caption)
 
-    with col1:
-        section_label("Value")
-        st.subheader("Best Value Cities")
-        st.caption("High opportunity · High affordability")
-        best = df_all.nlargest(20,"opportunity_index").nlargest(5,"affordability_score")
-        for _, r in best.iterrows():
+        # Generate HTML for all cards
+        cards_html = '<div class="insights-grid">'
+
+        for idx, (_, r) in enumerate(data_series.iterrows()):
             c = CLUSTER_COLORS[r["cluster"]]
             d = CLUSTER_DARK[r["cluster"]]
             card_data = render_insight_card(
                 r["city"], r["country"], c, d,
-                "Opportunity", r["opportunity_index"],
-                "Affordability", r["affordability_score"],
+                metric1_label, r[metric1_col],
+                metric2_label, r[metric2_col],
                 r["cluster"], r["growth_score"]
             )
-            # Display luxury booking card with image embedded
-            st.markdown(card_data["html"], unsafe_allow_html=True)
 
-    with col2:
-        section_label("Growth")
-        st.subheader("Rising Stars")
-        st.caption("Highest growth potential")
-        stars = df_all.nlargest(5,"growth_score")
-        for _, r in stars.iterrows():
-            c = CLUSTER_COLORS[r["cluster"]]
-            d = CLUSTER_DARK[r["cluster"]]
-            card_data = render_insight_card(
-                r["city"], r["country"], c, d,
-                "Growth", r["growth_score"],
-                "Opportunity", r["opportunity_index"],
-                r["cluster"], r["growth_score"]
-            )
-            # Display luxury booking card with image embedded
-            st.markdown(card_data["html"], unsafe_allow_html=True)
+            # Show first 3 cards, hide rest in expandable section
+            if idx < 3:
+                cards_html += card_data["html"]
+            else:
+                cards_html += f'<div class="hidden-cards">{card_data["html"]}</div>'
 
-    with col3:
-        section_label("Innovation")
-        st.subheader("Innovation Leaders")
-        st.caption("Highest innovation scores")
-        innov = df_all.nlargest(5,"innovation_score")
-        for _, r in innov.iterrows():
-            c = CLUSTER_COLORS[r["cluster"]]
-            d = CLUSTER_DARK[r["cluster"]]
-            card_data = render_insight_card(
-                r["city"], r["country"], c, d,
-                "Innovation", r["innovation_score"],
-                "Talent", r["talent_score"],
-                r["cluster"], r["growth_score"]
-            )
-            # Display luxury booking card with image embedded
-            st.markdown(card_data["html"], unsafe_allow_html=True)
+        cards_html += '</div>'
+        st.markdown(cards_html, unsafe_allow_html=True)
+
+        # Show "View All" button if more than 3 cards
+        if len(data_series) > 3:
+            col1, col2 = st.columns([1, 5])
+            with col1:
+                if st.button(f"View all {len(data_series)} cities", key=f"view_all_{title.lower()}"):
+                    st.session_state[f"expand_{title.lower()}"] = True
+
+            # Show remaining cards if expanded
+            if st.session_state.get(f"expand_{title.lower()}", False):
+                st.info(f"Showing all {len(data_series)} cities")
+                extra_html = '<div class="insights-grid">'
+                for idx, (_, r) in enumerate(data_series.iterrows()):
+                    if idx >= 3:
+                        c = CLUSTER_COLORS[r["cluster"]]
+                        d = CLUSTER_DARK[r["cluster"]]
+                        card_data = render_insight_card(
+                            r["city"], r["country"], c, d,
+                            metric1_label, r[metric1_col],
+                            metric2_label, r[metric2_col],
+                            r["cluster"], r["growth_score"]
+                        )
+                        extra_html += card_data["html"]
+                extra_html += '</div>'
+                st.markdown(extra_html, unsafe_allow_html=True)
+
+        st.markdown('<div style="height: 20px;"></div>', unsafe_allow_html=True)
+
+    # ═── Best Value Cities ───═
+    best = df_all.nlargest(20,"opportunity_index").nlargest(5,"affordability_score")
+    render_insight_section(
+        "Value", "Best Value Cities", "High opportunity · High affordability",
+        best, "Opportunity", "opportunity_index", "Affordability", "affordability_score"
+    )
+
+    # ═── Rising Stars ───═
+    stars = df_all.nlargest(5,"growth_score")
+    render_insight_section(
+        "Growth", "Rising Stars", "Highest growth potential",
+        stars, "Growth", "growth_score", "Opportunity", "opportunity_index"
+    )
+
+    # ═── Innovation Leaders ───═
+    innov = df_all.nlargest(5,"innovation_score")
+    render_insight_section(
+        "Innovation", "Innovation Leaders", "Highest innovation scores",
+        innov, "Innovation", "innovation_score", "Talent", "talent_score"
+    )
 
     divider()
     section_label("Key Findings")
