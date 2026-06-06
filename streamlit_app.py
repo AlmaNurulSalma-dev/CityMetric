@@ -311,26 +311,22 @@ p, li, td, th {{
     text-transform: uppercase; font-family: 'Inter', sans-serif;
 }}
 
-/* ── Image sizing with zoom for smaller images ── */
-.hero-image {{
+/* ── Image containers with fixed dimensions ── */
+.img-container.hero-image {{
     width: 100%; max-width: 1400px; height: 280px;
-    object-fit: cover; border-radius: 12px;
-    display: block; margin: 0 auto;
-    transform-origin: center; object-position: center;
+    border-radius: 12px; display: block; margin: 0 auto;
+    overflow: hidden;
 }}
-.cluster-image {{
+.img-container.cluster-image {{
     width: 100%; max-width: 400px; height: 260px;
-    object-fit: cover; border-radius: 12px;
-    display: block; margin: 0 auto;
-    transform-origin: center; object-position: center;
+    border-radius: 12px; display: block; margin: 0 auto;
+    overflow: hidden;
 }}
-.about-image {{
+.img-container.about-image {{
     width: 100%; max-width: 1200px; height: 220px;
-    object-fit: cover; border-radius: 12px;
-    display: block; margin: 0 auto;
-    transform-origin: center; object-position: center;
+    border-radius: 12px; display: block; margin: 0 auto;
+    overflow: hidden;
 }}
-img {{ max-width: 100%; height: auto; min-height: 100%; }}
 
 /* Plotly text contrast improvement */
 .plotly-graph-div text {{
@@ -388,8 +384,10 @@ def show_image(filename, fallback_text, fallback_color="#B4B8E0", img_class="clu
     path = ASSETS / filename
     if path.exists():
         st.markdown(
+            f'<div class="img-container {img_class}">'
             f'<img src="data:image/jpeg;base64,{get_image_base64(str(path))}" '
-            f'class="{img_class}" alt="{filename}"/>',
+            f'alt="{filename}" style="width:100%;height:100%;object-fit:cover;display:block;"/>'
+            f'</div>',
             unsafe_allow_html=True,
         )
     else:
