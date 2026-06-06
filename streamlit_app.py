@@ -311,23 +311,36 @@ p, li, td, th {{
     text-transform: uppercase; font-family: 'Inter', sans-serif;
 }}
 
-/* ── Image sizing ── */
+/* ── Image sizing with zoom for smaller images ── */
 .hero-image {{
     width: 100%; max-width: 1400px; height: 280px;
     object-fit: cover; border-radius: 12px;
     display: block; margin: 0 auto;
+    transform-origin: center; object-position: center;
 }}
 .cluster-image {{
     width: 100%; max-width: 400px; height: 260px;
     object-fit: cover; border-radius: 12px;
     display: block; margin: 0 auto;
+    transform-origin: center; object-position: center;
 }}
 .about-image {{
     width: 100%; max-width: 1200px; height: 220px;
     object-fit: cover; border-radius: 12px;
     display: block; margin: 0 auto;
+    transform-origin: center; object-position: center;
 }}
-img {{ max-width: 100%; height: auto; }}
+img {{ max-width: 100%; height: auto; min-height: 100%; }}
+
+/* Plotly text contrast improvement */
+.plotly-graph-div text {{
+    fill: {TEXT_MAIN} !important;
+    color: {TEXT_MAIN} !important;
+}}
+.plotly-graph-div .legend text {{
+    fill: {TEXT_MAIN} !important;
+    font-size: 13px !important;
+}}
 
 /* ── Hero section ── */
 .hero-text {{ position: relative; z-index: 2; }}
@@ -805,7 +818,7 @@ elif page == "Cluster Analysis":
             **chart_defaults(),
             polar=dict(
                 radialaxis=dict(range=[0,10],
-                                tickfont=dict(size=10, color=TEXT_MUTED),
+                                tickfont=dict(size=10, color=TEXT_MAIN),
                                 gridcolor=GRID_COL, linecolor=BORDER_COL),
                 angularaxis=dict(tickfont=dict(size=12, color=TEXT_MAIN)),
                 bgcolor="rgba(0,0,0,0)",
@@ -859,8 +872,8 @@ elif page == "Cluster Analysis":
             pk: dict(
                 radialaxis=dict(range=[0,10], tickfont_size=7,
                                 gridcolor=GRID_COL, linecolor=BORDER_COL,
-                                tickfont=dict(color=TEXT_MUTED)),
-                angularaxis=dict(tickfont=dict(size=9, color=TEXT_MUTED)),
+                                tickfont=dict(color=TEXT_MAIN)),
+                angularaxis=dict(tickfont=dict(size=9, color=TEXT_MAIN)),
                 bgcolor="rgba(0,0,0,0)",
             )
         })
@@ -922,9 +935,9 @@ elif page == "Dimension Deep-Dive":
                 **chart_defaults(), height=CHART_H,
                 xaxis=dict(range=[0, top_dim[sel_dim].max()+0.8],
                            showgrid=True, gridcolor=GRID_COL,
-                           tickfont=dict(color=TEXT_MUTED)),
+                           tickfont=dict(color=TEXT_MAIN)),
                 yaxis=dict(showgrid=False, tickfont=dict(color=TEXT_MAIN, size=11)),
-                legend=dict(title="", orientation="h", y=-0.1, font=dict(size=11)),
+                legend=dict(title="", orientation="h", y=-0.1, font=dict(size=11, color=TEXT_MAIN)),
                 margin=dict(l=0, r=50, t=10, b=40),
             )
             st.plotly_chart(fig, use_container_width=True)
@@ -1035,13 +1048,13 @@ elif page == "City Comparison":
             **chart_defaults(),
             polar=dict(
                 radialaxis=dict(range=[0,10],
-                                tickfont=dict(size=11, color=TEXT_MUTED),
+                                tickfont=dict(size=11, color=TEXT_MAIN),
                                 gridcolor=GRID_COL, linecolor=BORDER_COL),
                 angularaxis=dict(tickfont=dict(size=13, color=TEXT_MAIN)),
                 bgcolor="rgba(0,0,0,0)",
             ),
             height=CHART_H,
-            legend=dict(orientation="h", y=-0.08, font=dict(size=12)),
+            legend=dict(orientation="h", y=-0.08, font=dict(size=12, color=TEXT_MAIN)),
             margin=dict(t=20, b=60),
         )
         st.plotly_chart(fig_radar, use_container_width=True)
