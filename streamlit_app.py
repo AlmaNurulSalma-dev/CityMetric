@@ -350,12 +350,13 @@ p, li, td, th {{
 /* ── Insight Cards Grid Layout ── */
 .insights-grid {{
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-    margin-bottom: 32px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+    max-width: 500px;
 }}
 
-/* ── Insight Cards (Premium 2-Column Design) ── */
+/* ── Insight Cards (Ranked Single Column Design) ── */
 .insight-card {{
     width: 100%;
     background: #1A1A2E;
@@ -366,10 +367,29 @@ p, li, td, th {{
     flex-direction: column;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    position: relative;
 }}
 .insight-card:hover {{
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}}
+
+.rank-badge {{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFC700 100%);
+    color: #000000;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+    z-index: 10;
 }}
 .card-image {{
     width: 100%;
@@ -541,19 +561,16 @@ p, li, td, th {{
 /* ── Responsive adjustments ── */
 @media (max-width: 1400px) {{
     .insights-grid {{
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        max-width: 480px;
     }}
     .card-image {{
-        height: 190px;
+        height: 180px;
     }}
 }}
 
 @media (max-width: 1200px) {{
     .insights-grid {{
-        grid-template-columns: repeat(2, 1fr);
-        gap: 18px;
-        margin-bottom: 28px;
+        max-width: 450px;
     }}
     .card-image {{
         height: 170px;
@@ -568,11 +585,11 @@ p, li, td, th {{
 
 @media (max-width: 1024px) {{
     .insights-grid {{
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
+        max-width: 420px;
+        gap: 14px;
     }}
     .card-image {{
-        height: 150px;
+        height: 160px;
     }}
     .card-content {{
         padding: 14px;
@@ -769,8 +786,8 @@ def get_image_base64(image_path):
     with open(image_path, 'rb') as f:
         return base64.b64encode(f.read()).decode()
 
-def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, image_base64=None, cluster_label=None, trend=None):
-    """Return HTML for UX-optimized insight card with cluster label and trend indicator."""
+def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, image_base64=None, cluster_label=None, trend=None, rank=None):
+    """Return HTML for ranked insight card with rank badge."""
     rating_value = f"{metric1_val:.1f}"
     metric1_display = f"{metric1_val:.2f}"
     metric2_display = f"{metric2_val:.2f}"
@@ -783,6 +800,11 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
     else:
         image_html = '<div style="background: #2D2D4D;"></div>'
 
+    # Build rank badge (Top 1, Top 2, Top 3)
+    rank_badge_html = ''
+    if rank is not None and rank <= 3:
+        rank_badge_html = f'<div class="rank-badge">{rank}</div>'
+
     # Build cluster + trend badges
     cluster_trend_html = ''
     if cluster_label or trend:
@@ -794,9 +816,10 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
             cluster_trend_html += '<span class="trend-indicator" style="color: ' + trend_color + ';">' + trend + '</span>'
         cluster_trend_html += '</div>'
 
-    # Card HTML with cluster label, trend, and all metrics (no Explore button)
+    # Card HTML with rank badge, cluster label, trend, and metrics
     card_html = (
         '<div class="insight-card">' +
+        rank_badge_html +
         '<div class="card-image">' + image_html + '</div>' +
         '<div class="card-content">' +
         '<div>' +
@@ -826,8 +849,8 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
 
     return card_html
 
-def render_insight_card(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, cluster_num=None, growth_score=None):
-    """Render insight card - luxury booking style with image, cluster label, and trend."""
+def render_insight_card(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, cluster_num=None, growth_score=None, rank=None):
+    """Render insight card - ranked design with image, cluster label, trend, and rank."""
     # Try to load city image using base64 encoding
     city_lower = city.lower().replace(" ", "_")
     img_path = ASSETS / "cities" / "insights" / f"{city_lower}.jpg"
@@ -863,7 +886,8 @@ def render_insight_card(city, country, cluster_color, cluster_dark, metric1_labe
         "metric2_val": metric2_val,
         "cluster_label": cluster_label,
         "trend": trend,
-        "html": render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, img_base64, cluster_label, trend)
+        "rank": rank,
+        "html": render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, img_base64, cluster_label, trend, rank)
     }
 
 def chart_defaults():
@@ -1568,61 +1592,30 @@ elif page == "Insights":
     st.caption("What the data reveals about global city opportunities.")
     divider()
 
-    # Helper function to render insight section with 2-column grid and View All
-    def render_insight_section(title, subtitle, caption, data_series, metric1_label, metric1_col, metric2_label, metric2_col):
-        """Render insight section with grid layout and expandable View All."""
+    # Helper function to render insight section with ranked single-column layout
+    def render_insight_section(title, subtitle, caption, data_series, metric1_label, metric1_col, metric2_label, metric2_col, limit=3):
+        """Render insight section with ranked single-column cards (Top 1, 2, 3)."""
         section_label(title)
         st.subheader(subtitle)
         st.caption(caption)
 
-        # Generate HTML for all cards
+        # Generate HTML for ranked cards (Top 1, 2, 3)
         cards_html = '<div class="insights-grid">'
 
-        for idx, (_, r) in enumerate(data_series.iterrows()):
+        for rank, (_, r) in enumerate(data_series.head(limit).iterrows(), 1):
             c = CLUSTER_COLORS[r["cluster"]]
             d = CLUSTER_DARK[r["cluster"]]
             card_data = render_insight_card(
                 r["city"], r["country"], c, d,
                 metric1_label, r[metric1_col],
                 metric2_label, r[metric2_col],
-                r["cluster"], r["growth_score"]
+                r["cluster"], r["growth_score"], rank
             )
-
-            # Show first 3 cards, hide rest in expandable section
-            if idx < 3:
-                cards_html += card_data["html"]
-            else:
-                cards_html += f'<div class="hidden-cards">{card_data["html"]}</div>'
+            cards_html += card_data["html"]
 
         cards_html += '</div>'
         st.markdown(cards_html, unsafe_allow_html=True)
-
-        # Show "View All" button if more than 3 cards
-        if len(data_series) > 3:
-            col1, col2 = st.columns([1, 5])
-            with col1:
-                if st.button(f"View all {len(data_series)} cities", key=f"view_all_{title.lower()}"):
-                    st.session_state[f"expand_{title.lower()}"] = True
-
-            # Show remaining cards if expanded
-            if st.session_state.get(f"expand_{title.lower()}", False):
-                st.info(f"Showing all {len(data_series)} cities")
-                extra_html = '<div class="insights-grid">'
-                for idx, (_, r) in enumerate(data_series.iterrows()):
-                    if idx >= 3:
-                        c = CLUSTER_COLORS[r["cluster"]]
-                        d = CLUSTER_DARK[r["cluster"]]
-                        card_data = render_insight_card(
-                            r["city"], r["country"], c, d,
-                            metric1_label, r[metric1_col],
-                            metric2_label, r[metric2_col],
-                            r["cluster"], r["growth_score"]
-                        )
-                        extra_html += card_data["html"]
-                extra_html += '</div>'
-                st.markdown(extra_html, unsafe_allow_html=True)
-
-        st.markdown('<div style="height: 20px;"></div>', unsafe_allow_html=True)
+        st.markdown('<div style="height: 16px;"></div>', unsafe_allow_html=True)
 
     # ═── Best Value Cities ───═
     best = df_all.nlargest(20,"opportunity_index").nlargest(5,"affordability_score")
