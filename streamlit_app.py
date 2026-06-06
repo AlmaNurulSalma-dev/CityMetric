@@ -931,7 +931,8 @@ elif page == "Cluster Analysis":
                 radialaxis=dict(range=[0,10], tickfont_size=7,
                                 gridcolor=GRID_COL, linecolor=BORDER_COL,
                                 tickfont=dict(color=TEXT_MAIN)),
-                angularaxis=dict(tickfont=dict(size=9, color=TEXT_MAIN)),
+                angularaxis=dict(tickfont=dict(size=7.5, color=TEXT_MAIN),
+                                rotation=0),
                 bgcolor="rgba(0,0,0,0)",
             )
         })
@@ -993,10 +994,11 @@ elif page == "Dimension Deep-Dive":
                 **chart_defaults(), height=CHART_H,
                 xaxis=dict(range=[0, top_dim[sel_dim].max()+0.8],
                            showgrid=True, gridcolor=GRID_COL,
-                           tickfont=dict(color=TEXT_MAIN)),
+                           tickfont=dict(color=TEXT_MAIN),
+                           title=dict(text=f"{label} Score", font=dict(size=12, color=TEXT_MAIN))),
                 yaxis=dict(showgrid=False, tickfont=dict(color=TEXT_MAIN, size=11)),
-                legend=dict(title="", orientation="h", y=-0.1, font=dict(size=11, color=TEXT_MAIN)),
-                margin=dict(l=0, r=50, t=10, b=40),
+                legend=dict(title="", orientation="h", y=-0.15, font=dict(size=11, color=TEXT_MAIN)),
+                margin=dict(l=0, r=50, t=10, b=70),
             )
             st.plotly_chart(fig, use_container_width=True)
 
