@@ -493,34 +493,15 @@ def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1
     stars = min(5, max(1, int((metric1_val / 10) * 5)))
     star_display = "★" * stars + "☆" * (5 - stars)
 
-    # Build image HTML separately to avoid nested f-string issues
-    image_html = f'<img src="{image_path}" alt="{city}">' if image_path else '<div style="width: 100%; height: 100%; background: #2D2D4D;"></div>'
+    # Build image HTML separately
+    if image_path:
+        image_html = f'<img src="{image_path}" alt="{city}">'
+    else:
+        image_html = '<div style="width: 100%; height: 100%; background: #2D2D4D;"></div>'
 
-    card_html = f'''
-    <div class="insight-card">
-        <div class="card-image">
-            {image_html}
-            <div class="image-overlay"></div>
-        </div>
+    # Build card HTML without extra whitespace that might confuse parser
+    card_html = '<div class="insight-card"><div class="card-image">' + image_html + '<div class="image-overlay"></div></div><div class="card-content"><div><div class="card-title">' + city + '</div><div class="card-subtitle">' + country + '</div><div class="card-badges"><div class="badge-rating"><span class="badge-rating-value">' + rating_value + '</span><span class="badge-rating-stars">' + star_display + '</span></div><div class="badge-duration">' + metric1_label + ': ' + str(metric1_val) + '</div></div></div><button class="card-button">Explore ' + city + '</button></div></div>'
 
-        <div class="card-content">
-            <div>
-                <div class="card-title">{city}</div>
-                <div class="card-subtitle">{country}</div>
-
-                <div class="card-badges">
-                    <div class="badge-rating">
-                        <span class="badge-rating-value">{rating_value}</span>
-                        <span class="badge-rating-stars">{star_display}</span>
-                    </div>
-                    <div class="badge-duration">{metric1_label}: {metric1_val:.1f}</div>
-                </div>
-            </div>
-
-            <button class="card-button">Explore {city}</button>
-        </div>
-    </div>
-    '''
     return card_html
 
 def render_insight_card(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val):
