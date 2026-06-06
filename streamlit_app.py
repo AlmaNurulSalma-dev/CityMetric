@@ -347,82 +347,130 @@ p, li, td, th {{
 ::-webkit-scrollbar-thumb {{ background: {BORDER_COL}; border-radius: 3px; }}
 ::-webkit-scrollbar-thumb:hover {{ background: {PRIMARY}; }}
 
-/* ── Insight Cards (Luxury Booking Style) ── */
+/* ── Insight Cards (UX-First Flexbox Design) ── */
 .insight-card {{
     width: 280px;
-    height: 380px;
     background: #1A1A2E;
-    border-radius: 24px;
+    border-radius: 16px;
     overflow: hidden;
-    position: relative;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    display: inline-block;
-    transition: all 0.3s ease;
-    margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    display: inline-flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 12px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    vertical-align: top;
 }}
 .insight-card:hover {{
-    transform: translateY(-8px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
 }}
 .card-image {{
-    width: 100%; height: 55%; position: relative;
-    display: block; background: linear-gradient(135deg, #2D2D4D 0%, #1A1A2E 100%);
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(135deg, #2D2D4D 0%, #1A1A2E 100%);
+    overflow: hidden;
+    flex-shrink: 0;
 }}
 .card-image img {{
-    width: 100%; height: 100%; object-fit: cover;
-    object-position: center; display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.3s ease;
+}}
+.insight-card:hover .card-image img {{
+    transform: scale(1.05);
 }}
 .image-overlay {{
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(to bottom,
-        rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 40%, rgba(0, 0, 0, 0.7) 100%);
-    z-index: 1;
+    display: none;
 }}
 .card-content {{
-    position: absolute; bottom: 0; left: 0; right: 0; height: 45%;
-    background: linear-gradient(to bottom,
-        rgba(26, 26, 46, 0) 0%, rgba(26, 26, 46, 0.8) 30%, rgba(26, 26, 46, 1) 100%);
-    padding: 20px; display: flex; flex-direction: column;
-    justify-content: space-between; z-index: 2;
+    flex: 1;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #1A1A2E;
+    position: relative;
+    z-index: 1;
 }}
 .card-title {{
-    font-size: 18px; font-weight: 600; color: #FFFFFF;
-    margin: 0; line-height: 1.2; letter-spacing: 0.5px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
 }}
 .card-subtitle {{
-    font-size: 13px; color: #E0E0E0; margin: 6px 0 0 0; line-height: 1.3;
+    font-size: 12px;
+    color: #B0B0D0;
+    margin: 6px 0 0 0;
+    line-height: 1.4;
+    font-weight: 500;
 }}
 .card-badges {{
-    display: flex; gap: 10px; margin: 12px 0 0 0;
-    align-items: center; flex-wrap: wrap;
+    display: flex;
+    gap: 8px;
+    margin: 14px 0 12px 0;
+    align-items: center;
+    flex-wrap: wrap;
 }}
 .badge-rating {{
-    display: inline-flex; background: #FFD700; color: #1A1A2E;
-    padding: 6px 12px; border-radius: 20px; font-size: 12px;
-    font-weight: 600; align-items: center; gap: 4px; width: fit-content;
+    display: inline-flex;
+    background: linear-gradient(135deg, #FFD700 0%, #FFC700 100%);
+    color: #000000;
+    padding: 5px 11px;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 700;
+    align-items: center;
+    gap: 3px;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
 }}
 .badge-rating-value {{
-    font-size: 12px; font-weight: 700;
+    font-size: 11px;
+    font-weight: 800;
 }}
 .badge-rating-stars {{
-    font-size: 11px; letter-spacing: 2px;
+    font-size: 10px;
+    letter-spacing: 1px;
 }}
 .badge-duration {{
-    display: inline-flex; background: rgba(255, 215, 0, 0.2);
-    color: #FFD700; padding: 6px 12px; border-radius: 20px;
-    font-size: 11px; border: 1px solid #FFD700; font-weight: 500; width: fit-content;
+    display: inline-flex;
+    background: rgba(255, 215, 0, 0.15);
+    color: #FFD700;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    font-weight: 600;
 }}
 .card-button {{
-    width: 100%; padding: 12px 0; background: #FFFFFF;
-    color: #1A1A2E; border: none; border-radius: 16px;
-    font-size: 14px; font-weight: 600; cursor: pointer;
-    transition: all 0.3s ease; box-shadow: none; margin-top: auto;
+    width: 100%;
+    padding: 11px 0;
+    background: linear-gradient(135deg, #E8E4FF 0%, #F5F3FF 100%);
+    color: #1A1A2E;
+    border: none;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(232, 228, 255, 0.25);
+    margin-top: 8px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    letter-spacing: 0.3px;
 }}
 .card-button:hover {{
-    background: #F0F0F0; transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8F6FF 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(232, 228, 255, 0.4);
+}}
+.card-button:active {{
+    transform: translateY(0);
 }}
 
 /* ── Responsive adjustments ── */
@@ -488,19 +536,34 @@ def get_image_base64(image_path):
         return base64.b64encode(f.read()).decode()
 
 def render_insight_card_html(city, country, cluster_color, cluster_dark, metric1_label, metric1_val, metric2_label, metric2_val, image_path=None):
-    """Return HTML for luxury booking-style insight card."""
+    """Return HTML for UX-optimized insight card with flexbox layout."""
     rating_value = f"{metric1_val:.1f}"
     stars = min(5, max(1, int((metric1_val / 10) * 5)))
     star_display = "★" * stars + "☆" * (5 - stars)
 
-    # Build image HTML separately
-    if image_path:
-        image_html = f'<img src="{image_path}" alt="{city}">'
-    else:
-        image_html = '<div style="width: 100%; height: 100%; background: #2D2D4D;"></div>'
+    # Build image HTML
+    image_html = f'<img src="{image_path}" alt="{city}">' if image_path else '<div style="background: #2D2D4D;"></div>'
 
-    # Build card HTML without extra whitespace that might confuse parser
-    card_html = '<div class="insight-card"><div class="card-image">' + image_html + '<div class="image-overlay"></div></div><div class="card-content"><div><div class="card-title">' + city + '</div><div class="card-subtitle">' + country + '</div><div class="card-badges"><div class="badge-rating"><span class="badge-rating-value">' + rating_value + '</span><span class="badge-rating-stars">' + star_display + '</span></div><div class="badge-duration">' + metric1_label + ': ' + str(metric1_val) + '</div></div></div><button class="card-button">Explore ' + city + '</button></div></div>'
+    # Clean, simple HTML for proper flexbox rendering
+    card_html = (
+        '<div class="insight-card">'
+        '<div class="card-image">' + image_html + '</div>'
+        '<div class="card-content">'
+        '<div>'
+        '<div class="card-title">' + city + '</div>'
+        '<div class="card-subtitle">' + country + '</div>'
+        '<div class="card-badges">'
+        '<div class="badge-rating">'
+        '<span class="badge-rating-value">' + rating_value + '</span>'
+        '<span class="badge-rating-stars">' + star_display + '</span>'
+        '</div>'
+        '<div class="badge-duration">' + metric1_label[:3] + ': ' + f"{metric1_val:.1f}" + '</div>'
+        '</div>'
+        '</div>'
+        '<button class="card-button">Explore</button>'
+        '</div>'
+        '</div>'
+    )
 
     return card_html
 
